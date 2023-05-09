@@ -1,0 +1,1229 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Data Screening},
+  pdfauthor={Karmanya Pathak},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{Data Screening}
+\author{Karmanya Pathak}
+\date{2020-03-01}
+
+\begin{document}
+\maketitle
+
+\hypertarget{dataset}{%
+\section{Dataset:}\label{dataset}}
+
+600 employees participated in a company-wide experiment to test if an
+educational program would be effective at increasing employee
+satisfaction. Half of the employees were assigned to be in the control
+group, while the other half were assigned to be in the experimental
+group. The experimental group was the only group that received the
+educational intervention. All groups were given an employee satisfaction
+scale at time one to measure their initial levels of satisfaction. The
+same scale was then used half way through the program and at the end of
+the program. The goal of the experiment was to assess satisfaction to
+see if it increased across the measurements during the program as
+compared to a control group.
+
+\hypertarget{variables}{%
+\subsection{Variables:}\label{variables}}
+
+\begin{verbatim}
+a) Gender (1 = male, 2 = female)
+b) Group (1 = control group, 2 = experimental group)
+c) 3 satisfaction scores, ranging from 2-100 points. Decimals are possible! The control group was measured at the same three time points, but did not take part in the educational program. 
+    i) Before the program
+    ii) Half way through the program 
+    iii) After the program 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"D:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Harrisburg}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Lectures}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Spring 2020}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{ANLY 500 - Principles of Analytics I}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Assignment 6}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{06_data.csv"}\NormalTok{)}
+\NormalTok{df}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     Gender Group     Begin   Middle     After
+## 1        2     2 104.32850 64.02522 105.29044
+## 2        2     2  69.76625 63.76701  98.36746
+## 3        2     2  87.25115 56.20119  93.02209
+## 4        2     2  94.75541 63.45308 106.85631
+## 5       NA     2  98.60394 70.96728 112.72153
+## 6        2     2  97.15226 66.91333 106.36626
+## 7        2     2 104.43724 62.38163 110.20925
+## 8        2     2 106.53993 69.99617 110.98618
+## 9        2     2        NA 57.78355  90.38513
+## 10       2     2 116.81772 67.84313  97.94671
+## 11       2     2  74.02934 60.11066 106.22569
+## 12       2     2 118.40551 63.59667 106.47470
+## 13       2     2 141.62214 70.13731  99.11881
+## 14       2     2  82.33188 63.06020 102.59935
+## 15       2     2  87.63083 54.04317  96.35607
+## 16       2     2  86.99718 68.35782 103.33960
+## 17       2     2  91.00026 64.57933 101.09616
+## 18       2     2 107.39252 63.99999  97.44352
+## 19       2     2  95.07283 61.72536  93.39801
+## 20       2     2  85.11262 70.70730 100.41426
+## 21       2     2 100.61499 61.44619 109.70428
+## 22       2     2  83.70307 70.90991 109.68627
+## 23       2     2  98.29848 58.02362  99.70706
+## 24       2     2 120.89302 65.47378 104.45278
+## 25       2     2 109.25513 73.51727 107.87888
+## 26       2     2 107.57412 61.63207 108.37814
+## 27       2     2  79.14118 67.24613 108.60843
+## 28       2     2 115.71745 68.34144  96.32636
+## 29       2     2  82.95947 65.68103  99.13164
+## 30       2     2 102.26904 63.52661        NA
+## 31       2     2  96.21704 65.58331  96.04052
+## 32       2     2 101.34180 64.19647 109.57067
+## 33       2     2 106.11093       NA 108.62340
+## 34       2     2  96.94575 54.22389  95.46501
+## 35       2     2 112.92188 61.84247  98.43568
+## 36       2     2 104.94856 59.00905  92.69804
+## 37       2     2 100.60732 60.47409 103.49996
+## 38       2     2 102.12175 59.71099  87.89063
+## 39       2     2 108.16679 66.47854 107.11423
+## 40       2     2  81.81384 65.97559 101.35553
+## 41       2     2  76.63378 61.88833 109.88534
+## 42       2     2  85.25766 60.97964 101.74609
+## 43       2     2 119.79997 69.54603 102.17920
+## 44       2     2 104.29431 66.13045 106.76299
+## 45       2     2  89.03199 66.48685 109.33162
+## 46       2     2 108.60607 68.24068 108.05446
+## 47       2     2 103.36185       NA  98.98435
+## 48       2     2  85.68194 64.41179 103.43925
+## 49       2     2 110.58224 69.82784  98.74091
+## 50       2     2  95.98756 62.26632 104.82952
+## 51       2     2 120.06244 70.53071 101.28932
+## 52       2     2 105.95304 64.79962  99.50870
+## 53       2     2 101.13461 67.23575 104.41075
+## 54       2     2  70.86812 64.85649  98.83446
+## 55       2     2 101.85422 66.13343  98.66710
+## 56       2     2 102.18802 70.62357 100.88872
+## 57       2     2  97.60645 63.53957 101.79883
+## 58       2     2  94.32352 67.09153 107.05761
+## 59       2     2  98.32305 57.75399  90.10766
+## 60       2     2 133.01515 61.03665 103.17500
+## 61       2     2  88.80149 67.14389 101.14937
+## 62       2     2  89.68178 62.93971 106.86796
+## 63       2     2 107.33775       NA  91.79630
+## 64       2     2 101.66530 63.17062 105.01928
+## 65       2     2 114.86894 61.25732  92.34569
+## 66       2     2  84.50513 67.79239  99.28899
+## 67       2     2 103.69215 60.43885 105.14081
+## 68       2     2 114.23888 71.81298 110.23703
+## 69       2     2 142.30512 70.55498 101.24554
+## 70       2     2 108.15536 66.57922 102.44157
+## 71       2     2 107.35098 63.04607  96.23488
+## 72       2     2 110.44550 75.22989        NA
+## 73       2     2  95.63421 63.10294  96.06659
+## 74       2     2 123.89310 71.55483  98.49245
+## 75       2     2 102.11166 61.05479  97.93273
+## 76       2     2 102.64362 69.39395  96.03595
+## 77       2     2  93.66078 61.28942 111.38895
+## 78       2     2 104.30332 65.35047 103.42032
+## 79       2     2 113.55645 60.78132 102.99873
+## 80       2     2  67.15148 68.77434 104.24029
+## 81       2     2 117.24965 67.84517 106.86717
+## 82       2     2 103.98730 62.78503  99.61101
+## 83       2     2 115.37428 73.24253  95.92079
+## 84       2     2  77.20435 60.67395  99.37276
+## 85       2     2  85.97011 66.01479  97.93295
+## 86       2     2  89.80046 62.57341  99.41324
+## 87       2     2 148.24863 64.65475  94.47679
+## 88       2     2 112.00056 59.84184  95.98890
+## 89       2     2  87.71512 69.47422 108.04307
+## 90       2     2 121.38011 65.88319 110.33695
+## 91       2     2  94.22434 66.95729 111.92324
+## 92       2     2 118.21195 56.56936  95.30728
+## 93       2     2  78.30155 66.40412 107.16781
+## 94       2     2 104.79409 68.15341 104.24068
+## 95       2     2  97.64442 65.84463  95.13702
+## 96       2     2  95.71776 57.61066 100.25842
+## 97       2     2 114.94373 66.76855  97.40468
+## 98       2     2  89.91819 64.49586 101.86059
+## 99       2     2  82.78314 62.73355  90.84591
+## 100      2     2 127.85299 70.58527  96.17352
+## 101      1     2 126.39051 58.97478 103.28641
+## 102      1     2 103.85567 66.83906  90.44968
+## 103      1     2  98.02757 69.98438  97.96085
+## 104      1    NA 105.74866 60.02646 113.78612
+## 105      1     2 132.08680 70.95298  95.70022
+## 106      1     2 113.98783 58.75722  98.37393
+## 107      1     2 108.72196 62.68269 102.14239
+## 108      1     2 105.43470 61.83493 103.16134
+## 109      1     2  93.02446 62.12091  98.63480
+## 110      1     2 111.15346 59.89576  94.06489
+## 111      1     2  73.73833 63.31934 116.29572
+## 112      1     2  98.37101 69.27093 104.75455
+## 113      1     2  95.90401 57.75435  96.23390
+## 114      1     2 101.19411 67.85710  99.99309
+## 115      1     2  89.05893 61.01945  99.77121
+## 116      1     2  97.88928 67.53856 102.14498
+## 117      1     2 125.23502 68.67569  98.54626
+## 118     NA     2  89.74374 73.33662 107.80766
+## 119      1     2 110.33997 72.77562 109.56211
+## 120      1     2  87.10397 58.23442 110.46016
+## 121      1     2 105.27948 65.69824        NA
+## 122      1     2 103.04377 69.67107  94.28267
+## 123      1     2 103.64434 63.63151 105.63942
+## 124      1     2 101.27087 67.75840 110.66931
+## 125      1     2  94.61499 66.76803  99.89978
+## 126      1     2 110.32170 62.81118  99.32554
+## 127      1     2 114.64662 53.19936 101.50685
+## 128      1     2 107.95489 73.44253  98.35922
+## 129      1     2 103.36601 62.88760  98.66092
+## 130      1     2 113.92473 62.99676  92.21549
+## 131      1     2 105.37374 70.69389 105.94383
+## 132      1     2 109.17449 68.88262  93.53885
+## 133      1     2  94.46785 65.44314  99.92582
+## 134      1     2  79.99834 67.80892 107.23741
+## 135      1     2  97.31830 73.22038 105.22430
+## 136      1     2  99.84746 68.71828 110.35750
+## 137      1     2 101.38524 70.40611 104.95643
+## 138      1     2 104.05859 71.25379  96.49779
+## 139      1     2  92.79139 60.20452 100.73958
+## 140      1     2  98.13266 62.28932  93.32995
+## 141      1     2 114.25875 64.54200  96.91308
+## 142      1     2        NA 61.25588  97.85586
+## 143      1     2 107.84932 64.04640  99.61846
+## 144      1     2 100.55092 65.72860  98.61883
+## 145      1     2 108.89565 72.03467 110.02546
+## 146      1     2 109.15194 74.15333  99.35213
+## 147      1     2  95.32165 61.06540 107.71509
+## 148      1     2  97.08541 61.08870  97.65042
+## 149      1     2 105.49989       NA 108.18544
+## 150      1     2 103.03301 54.43901  89.76847
+## 151      1     2 111.24139 58.17731 102.65574
+## 152      1     2 101.77407 61.83019 108.46016
+## 153      1     2 112.42737 73.77434  95.82168
+## 154      1     2 100.99746 62.40825  98.89695
+## 155      1     2 113.72064 75.45384 102.32446
+## 156      1     2 102.67874 68.53869 113.74132
+## 157      1     2  98.56289 54.02390  97.70289
+## 158      1     2  99.91429 61.83695 105.60941
+## 159      1     2 110.13514 60.35507  95.83229
+## 160      1     2 102.61874 69.58407 108.85822
+## 161      1     2  88.72733 63.95768 104.91068
+## 162      1     2  93.28116 65.92415 100.24553
+## 163      1     2 100.20275 70.84741 106.07853
+## 164      1     2 112.51703 61.45123  97.23965
+## 165      1     2 101.05459 59.70476  96.96641
+## 166      1     2  96.66899 64.70462 103.92205
+## 167      1     2  88.00470 61.44319  97.48796
+## 168      1     2 102.13559 57.39131 105.14255
+## 169      1     2 103.68993 71.85679 108.34008
+## 170      1     2 106.29716 61.08788 107.17230
+## 171      1     2 103.61130       NA 108.20347
+## 172      1     2 101.69829 68.58206 117.86976
+## 173      1     2 113.09289 71.71726 106.03757
+## 174      1     2 106.99027 65.81293 101.75547
+## 175     NA     2 107.52854 65.13391 103.95960
+## 176      1     2  96.96296 59.57793 101.93268
+## 177      1     2 110.43573 59.13854  95.21089
+## 178      1     2 121.76556 64.58219 107.08322
+## 179      1     2 118.61803 68.91449 108.55847
+## 180      1     2  99.13587 57.12133 109.76663
+## 181      1     2 100.90424 65.73530 106.68901
+## 182      1     2  98.81468 67.67598  99.30856
+## 183      1     2 104.17758 70.43181 115.06648
+## 184      1     2 105.64100 54.27036  98.12412
+## 185      1     2 114.65940 66.79408 101.14627
+## 186      1     2 110.69343 63.58352 106.03210
+## 187      1     2 103.35843 69.88062  99.03291
+## 188      1     2 102.72579 66.28050  97.34217
+## 189      1     2 125.22308 68.09480 101.59470
+## 190      1     2  91.54769 74.75108 111.32019
+## 191      1     2 107.08405 66.90452 107.23804
+## 192      1     2        NA 64.15568  95.25814
+## 193      1     2 115.10452 59.18082 106.22153
+## 194      1     2  99.88843 66.84379  99.85900
+## 195      1     2  86.38438 68.24402  97.48359
+## 196      1     2 114.43163 58.00787  93.77204
+## 197      1     2 102.77622 65.63801 103.65942
+## 198      1     2        NA 71.74681 104.64073
+## 199      1     2  82.81595 63.25205 110.61244
+## 200      1     2  98.38602 63.40764 102.53213
+## 201      2     1 118.42700 70.88351 105.09842
+## 202      2     1 113.83232 67.97773  86.53000
+## 203      2     1        NA 55.73065  97.27474
+## 204      2     1  93.40217 58.62684 104.13035
+## 205      2     1 110.68714 64.11765  99.45954
+## 206      2     1 111.88072 58.51392  90.50113
+## 207      2     1  96.06031 52.09365  81.80996
+## 208      2     1 101.27215 64.81099  91.82338
+## 209      2     1 109.97067 67.01915  94.80158
+## 210      2    NA  99.31093 71.91833  65.73372
+## 211     NA    NA  95.35959       NA  82.64470
+## 212      2     1 101.47303 57.92025  87.28671
+## 213      2     1 113.12887 62.65200        NA
+## 214      2     1 116.27293 63.48275  84.06709
+## 215      2     1  96.26725 59.99588  61.31248
+## 216      2     1 100.05098 55.27259 101.04213
+## 217      2     1 102.24494 60.10248  86.81044
+## 218      2     1 122.58310 61.15046  91.98422
+## 219      2    NA 102.55585 66.69756  91.52545
+## 220      2     1 116.06473 53.49910  85.92321
+## 221      2     1  94.41488 70.48354 107.12474
+## 222      2     1 103.27705 57.76097  90.36571
+## 223      2     1  99.09429 76.24065  74.04094
+## 224      2     1  95.04164 69.29250  80.53894
+## 225      2     1 116.06230 59.40869 111.30059
+## 226      2     1  99.77121 67.73611  66.84285
+## 227      2     1 108.09876 63.00532  88.54140
+## 228      2     1 104.80390 51.12198  86.20937
+## 229      2     1 100.52713 56.57969  91.45683
+## 230      2     1 120.46291 65.14950  92.41265
+## 231      2     1 103.59107 58.34039  76.72077
+## 232      2     1  92.97474 61.18332  84.21828
+## 233      2     1 103.41577 60.64595 113.94742
+## 234      2     1 104.07565 58.98583  75.22829
+## 235      2     1 111.71573 65.28281 104.34350
+## 236      2     1  89.22748       NA 102.69411
+## 237      2     1 115.58350 62.43240  85.91221
+## 238      2     1  74.94585 70.74050  90.85004
+## 239      2     1 104.30008 78.83512 100.39406
+## 240      2     1 100.78133 55.34869  77.79626
+## 241      2     1 137.29823 56.27766  96.16559
+## 242      2     1 106.72357 59.07991  94.89232
+## 243      2     1 104.39288 61.59287  92.58477
+## 244      2     1 101.00952 63.80925  86.60257
+## 245      2     1  87.38416 74.14827  84.15932
+## 246      2     1  84.74427 48.99218  87.41775
+## 247      2     1 109.82284 63.00585  75.56022
+## 248      2     1  91.81160 63.16125  88.54927
+## 249      2     1 102.31362 68.42253  90.63650
+## 250      2     1  95.59433 65.96805  92.92103
+## 251      2     1 110.40454 52.81047 103.95067
+## 252      2     1 108.45503 65.31706  86.67520
+## 253      2     1  97.50619 63.41129  86.82251
+## 254      2     1 102.28908 74.35679  87.49876
+## 255      2     1  92.15974 65.58465  85.14916
+## 256      2    NA 101.66865 55.38852        NA
+## 257      2     1  99.16682 56.09143 114.93704
+## 258      2     1  94.61541 73.70210  64.27408
+## 259      2     1 114.21376 64.44297  92.52786
+## 260      2     1 119.40217 65.80048  85.88984
+## 261      2     1  94.17243 68.06158 108.62769
+## 262      2     1 106.89312 53.99971  97.94672
+## 263      2     1  93.60723 71.17943  91.81620
+## 264      2     1 109.25044 64.32456  85.10037
+## 265      2     1 110.01346 70.58992  86.86006
+## 266      2     1 107.19856 60.68337 114.10735
+## 267      2     1        NA 60.32892  94.13765
+## 268      2     1  77.37774       NA  94.66428
+## 269      2     1 104.20966 56.95269  94.44297
+## 270      2     1 100.14889 56.09588  87.90389
+## 271      2     1 123.57014 61.96192  82.60019
+## 272      2     1 112.56545 56.65656  82.48097
+## 273      2     1  89.12969 58.03457  94.46291
+## 274      2     1 103.21619 72.60855  93.53346
+## 275      2     1 111.24189 60.13540  91.00391
+## 276      2     1 112.08485 69.67437  88.67651
+## 277      2     1  89.41441 64.32428  95.88574
+## 278      2     1 108.67786 70.84768  92.60262
+## 279      2     1 107.87225 63.08240  99.97198
+## 280      2     1  92.42969 62.42351  86.41121
+## 281      2     1 106.77600 71.94871  85.45350
+## 282      2     1 104.62979 68.08191  94.30465
+## 283      2     1  99.29408 65.67830 101.80683
+## 284      2     1  92.46533 54.60187  87.88539
+## 285      2     1 112.52137 56.93627  97.64312
+## 286      2     1 110.93815 67.51635        NA
+## 287      2     1 102.91817 57.86102  85.73774
+## 288      2     1 102.54088 62.65467 101.99624
+## 289      2     1 112.37303 63.74324  91.32318
+## 290      2     1 115.71906 56.55061  88.06614
+## 291      2     1  95.32597 53.35840  94.35340
+## 292      2     1  93.52269 59.45044 100.51049
+## 293      2     1  95.33218 67.61434  68.35777
+## 294      2     1 111.08639 55.92965  71.81539
+## 295      2     1 101.51173 52.70250  70.38913
+## 296      2     1 108.54689 63.94695 100.54167
+## 297      2     1  85.48889 58.11264  97.12829
+## 298      2     1  98.60225 69.19364  79.70414
+## 299      2     1  98.19376 61.64077  94.47046
+## 300      2     1 101.43547 69.57386  93.37862
+## 301      1     1  96.07495 47.31731  92.17244
+## 302      1     1 112.34036 63.05129  77.39114
+## 303      1    NA 124.58315 77.52360  98.72637
+## 304      1     1  82.95688 60.44250  91.03409
+## 305      1     1  91.61258 70.07043  96.17310
+## 306      1     1 103.13418 49.74500  77.71706
+## 307      1     1  93.78932 65.19079  94.62616
+## 308      1     1  87.36904 53.97269  86.00785
+## 309      1     1  82.24186 74.12152  65.07271
+## 310      1     1  93.95314 56.11101 104.10372
+## 311      1     1  89.38023 71.45160  48.15125
+## 312      1     1 107.01752 57.03513  88.62860
+## 313      1     1  87.05553 72.37399  95.40124
+## 314      1     1 135.07944 71.95989  88.92172
+## 315      1     1 107.83967 63.52948 120.40955
+## 316      1     1 102.42397 70.39213  92.67837
+## 317      1     1 117.04882 77.09955  96.93442
+## 318     NA     1 115.70113 58.88733  97.07738
+## 319      1     1  88.56440 57.66074  82.89749
+## 320      1     1  94.90008 56.73510  86.76032
+## 321      1     1  96.44330 58.13486  73.44220
+## 322      1     1 135.57145 63.90064  79.77082
+## 323      1    NA  97.31261 67.15071  97.94113
+## 324      1     1  83.39575 56.35746  80.21430
+## 325      1     1  83.52297 54.50412  77.17038
+## 326      1     1        NA 72.20754 109.08879
+## 327      1     1  95.14885 73.60687  97.79978
+## 328     NA     1 118.01185 67.72176  82.26483
+## 329      1     1  94.96893 64.12212  91.19258
+## 330      1     1  87.04858 66.45295  77.20135
+## 331      1     1 104.43028 65.23525  95.61543
+## 332      1     1  83.41525 65.30073  72.74867
+## 333      1     1 107.17189 64.89918 103.24406
+## 334      1     1 100.79512 51.56013  88.74987
+## 335      1     1 121.99742 72.37963  76.41806
+## 336      1     1        NA 56.51091  83.31816
+## 337      1     1 105.10426 45.91528 106.77989
+## 338      1     1  86.15815 54.98220  96.71426
+## 339      1     1  88.58723 59.60765  84.86503
+## 340      1     1  84.88775 63.43355  77.13131
+## 341      1     1 107.24766 57.27162 105.33737
+## 342      1     1  97.23468 51.75742  91.08803
+## 343      1     1 116.68106 60.12065  59.62783
+## 344      1     1  84.42039 63.58327  86.63301
+## 345      1     1  85.48837 57.73586  73.82998
+## 346      1     1 116.46678 65.87774  84.14637
+## 347      1     1  96.10714 70.03737        NA
+## 348      1     1  96.80155 71.43306 100.28078
+## 349      1     1  84.42451 66.38721  81.18580
+## 350      1     1  82.88093 67.48543  83.49161
+## 351      1     1 117.11209 64.09373  94.42237
+## 352      1     1  99.32940 64.18596  92.69104
+## 353      1     1  98.25025 51.51654  90.06798
+## 354      1     1 111.68451 48.82706  82.11522
+## 355      1     1 107.23252 83.79365 103.59800
+## 356      1     1 117.12675 71.78058  92.08126
+## 357      1     1 112.66145 67.15941  85.18093
+## 358      1     1  99.15365 67.80933  99.55327
+## 359      1     1 126.18795 73.64036  89.63435
+## 360      1     1  84.25867 64.22332  96.97343
+## 361      1     1 119.03087 66.37487 107.20063
+## 362      1     1 125.01737 69.10931  96.47715
+## 363      1     1 104.80718 58.98248  90.14530
+## 364      1     1  93.50425 75.08922 118.71256
+## 365     NA     1  97.29640 71.10213  91.99120
+## 366      1     1 100.06457 70.55321        NA
+## 367      1     1  88.56184 59.30828 108.18428
+## 368      1     1  80.73109 47.54789  93.74733
+## 369      1     1  95.40156 60.60692  89.20570
+## 370      1     1  95.69554 56.37331 101.27537
+## 371      1     1 109.84813 52.49720  60.29609
+## 372      1     1 115.83086 59.81619 102.34442
+## 373      1     1  99.78701 71.53743  64.91101
+## 374      1     1 102.67339 64.52403  71.77475
+## 375      1     1 100.25822 52.60323  96.98771
+## 376      1     1  94.84940 49.53156  82.15855
+## 377      1     1 103.60033 65.46734  97.31622
+## 378      1     1 103.87482 69.67533  53.69310
+## 379      1     1 115.93409 78.09429  85.60677
+## 380      1     1  88.67785 65.31669  72.05297
+## 381      1     1 110.82945 42.32406  84.63832
+## 382      1     1 104.97421 64.29596  89.72125
+## 383      1    NA  93.07223 54.35514  89.17554
+## 384      1     1 110.88982 66.61103  82.06130
+## 385      1     1  94.37279 53.30424  75.00576
+## 386      1     1  82.29452 80.26107  96.94363
+## 387      1     1 115.54754 77.25596  87.61826
+## 388      1     1 120.74665 62.54317  83.23520
+## 389      1     1  88.95511 53.44328  84.39569
+## 390      1     1  96.46650 64.52465  89.17924
+## 391      1     1  61.15174 63.69044  82.07452
+## 392      1     1 124.73912 81.68047 115.80485
+## 393      1     1 133.48358 51.29501  88.89509
+## 394      1     1  88.19279 65.02487 103.98244
+## 395      1     1 103.19471 63.96526  93.40585
+## 396      1     1 109.64001 77.31685  89.54846
+## 397      1     1  96.90180 37.34613  58.46257
+## 398      1     1 102.81552 60.01785  92.51329
+## 399      1     1  91.39913 48.54324  96.03615
+## 400     NA     1  84.35828 44.27931 111.74718
+\end{verbatim}
+
+\hypertarget{data-screening}{%
+\section{Data screening:}\label{data-screening}}
+
+\hypertarget{accuracy}{%
+\subsection{Accuracy:}\label{accuracy}}
+
+\begin{verbatim}
+a)  Include output and indicate how the data are not accurate.
+b)  Include output to show how you fixed the accuracy errors, and describe what you did.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df1 <-}\StringTok{ }\NormalTok{df}
+
+\CommentTok{#Checking for errors or typos}
+\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{Gender)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##   1   2 
+## 194 198
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{Group)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##   1   2 
+## 193 199
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df1}\OperatorTok{$}\NormalTok{Gender =}\StringTok{ }\KeywordTok{factor}\NormalTok{(df1}\OperatorTok{$}\NormalTok{Gender, }
+                     \DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{), }
+                     \DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Male"}\NormalTok{, }\StringTok{"Female"}\NormalTok{))}
+
+\NormalTok{df1}\OperatorTok{$}\NormalTok{Group =}\StringTok{ }\KeywordTok{factor}\NormalTok{(df1}\OperatorTok{$}\NormalTok{Group, }
+                     \DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{), }
+                     \DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Control Group"}\NormalTok{, }\StringTok{"Experimental Group"}\NormalTok{))}
+
+\KeywordTok{summary}\NormalTok{(df1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     Gender                   Group         Begin            Middle     
+##  Male  :194   Control Group     :193   Min.   : 61.15   Min.   :37.35  
+##  Female:198   Experimental Group:199   1st Qu.: 94.72   1st Qu.:59.88  
+##  NA's  :  8   NA's              :  8   Median :102.26   Median :64.12  
+##                                        Mean   :102.17   Mean   :63.86  
+##                                        3rd Qu.:110.04   3rd Qu.:68.18  
+##                                        Max.   :148.25   Max.   :83.79  
+##                                        NA's   :8        NA's   :8      
+##      After       
+##  Min.   : 48.15  
+##  1st Qu.: 89.99  
+##  Median : 97.42  
+##  Mean   : 95.83  
+##  3rd Qu.:103.73  
+##  Max.   :120.41  
+##  NA's   :8
+\end{verbatim}
+
+I labelled the levels 1 and 2 in Gender as Male and Female and levels 1
+and 2 in Group as Control Group and Experimental Group respectively.
+
+\hypertarget{missing-data}{%
+\subsection{Missing data:}\label{missing-data}}
+
+\begin{verbatim}
+a)  Include output that shows you have missing data.
+b)  Include output and a description that shows what you did with the missing data.
+    i)  Replace all participant data if they have less than or equal to 20% of missing data by row. 
+    ii) You can leave out the other participants (i.e. you do not have to create allrows). 
+    
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      Gender          Group           Begin            Middle     
+##  Min.   :1.000   Min.   :1.000   Min.   : 61.15   Min.   :37.35  
+##  1st Qu.:1.000   1st Qu.:1.000   1st Qu.: 94.72   1st Qu.:59.88  
+##  Median :2.000   Median :2.000   Median :102.26   Median :64.12  
+##  Mean   :1.505   Mean   :1.508   Mean   :102.17   Mean   :63.86  
+##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:110.04   3rd Qu.:68.18  
+##  Max.   :2.000   Max.   :2.000   Max.   :148.25   Max.   :83.79  
+##  NA's   :8       NA's   :8       NA's   :8        NA's   :8      
+##      After       
+##  Min.   : 48.15  
+##  1st Qu.: 89.99  
+##  Median : 97.42  
+##  Mean   : 95.83  
+##  3rd Qu.:103.73  
+##  Max.   :120.41  
+##  NA's   :8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{apply}\NormalTok{(df,}\DecValTok{2}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{sum}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(x)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Gender  Group  Begin Middle  After 
+##      8      8      8      8      8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{percentmiss =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}\KeywordTok{sum}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(x))}\OperatorTok{/}\KeywordTok{length}\NormalTok{(x)}\OperatorTok{*}\DecValTok{100}\NormalTok{\}}
+\KeywordTok{apply}\NormalTok{(df,}\DecValTok{1}\NormalTok{,percentmiss)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   [1]  0  0  0  0 20  0  0  0 20  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+##  [26]  0  0  0  0 20  0  0 20  0  0  0  0  0  0  0  0  0  0  0  0  0 20  0  0  0
+##  [51]  0  0  0  0  0  0  0  0  0  0  0  0 20  0  0  0  0  0  0  0  0 20  0  0  0
+##  [76]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [101]  0  0  0 20  0  0  0  0  0  0  0  0  0  0  0  0  0 20  0  0 20  0  0  0  0
+## [126]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 20  0  0  0  0  0  0 20  0
+## [151]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 20  0  0  0 20
+## [176]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 20  0  0  0  0  0 20  0  0
+## [201]  0  0 20  0  0  0  0  0  0 20 60  0 20  0  0  0  0  0 20  0  0  0  0  0  0
+## [226]  0  0  0  0  0  0  0  0  0  0 20  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [251]  0  0  0  0  0 40  0  0  0  0  0  0  0  0  0  0 20 20  0  0  0  0  0  0  0
+## [276]  0  0  0  0  0  0  0  0  0  0 20  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [301]  0  0 20  0  0  0  0  0  0  0  0  0  0  0  0  0  0 20  0  0  0  0 20  0  0
+## [326] 20  0 20  0  0  0  0  0  0  0 20  0  0  0  0  0  0  0  0  0  0 20  0  0  0
+## [351]  0  0  0  0  0  0  0  0  0  0  0  0  0  0 20 20  0  0  0  0  0  0  0  0  0
+## [376]  0  0  0  0  0  0  0 20  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 20
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{missing =}\StringTok{ }\KeywordTok{apply}\NormalTok{(df,}\DecValTok{1}\NormalTok{,percentmiss)}
+\KeywordTok{table}\NormalTok{(missing)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## missing
+##   0  20  40  60 
+## 363  35   1   1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{replace =}\StringTok{ }\KeywordTok{subset}\NormalTok{(df, missing }\OperatorTok{<=}\StringTok{ }\DecValTok{20}\NormalTok{)}
+\NormalTok{missing1 =}\StringTok{ }\KeywordTok{apply}\NormalTok{(replace,}\DecValTok{1}\NormalTok{,percentmiss)}
+\KeywordTok{table}\NormalTok{(missing1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## missing1
+##   0  20 
+## 363  35
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dont =}\StringTok{ }\KeywordTok{subset}\NormalTok{(df, missing }\OperatorTok{>}\StringTok{ }\DecValTok{20}\NormalTok{)}
+\NormalTok{missing2 =}\StringTok{ }\KeywordTok{apply}\NormalTok{(dont,}\DecValTok{1}\NormalTok{,percentmiss)}
+\KeywordTok{table}\NormalTok{(missing2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## missing2
+## 40 60 
+##  1  1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{apply}\NormalTok{(df,}\DecValTok{2}\NormalTok{,percentmiss)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Gender  Group  Begin Middle  After 
+##      2      2      2      2      2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{replace_col =}\StringTok{ }\NormalTok{replace[,}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{)]}
+\NormalTok{dont_col =}\StringTok{ }\NormalTok{replace[,}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{)]}
+
+\CommentTok{#install.packages('mice')}
+\KeywordTok{library}\NormalTok{(}\StringTok{'mice'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'mice'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     cbind, rbind
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{temp_no_miss =}\StringTok{ }\KeywordTok{mice}\NormalTok{(replace_col)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  iter imp variable
+##   1   1  Group  Middle  After
+##   1   2  Group  Middle  After
+##   1   3  Group  Middle  After
+##   1   4  Group  Middle  After
+##   1   5  Group  Middle  After
+##   2   1  Group  Middle  After
+##   2   2  Group  Middle  After
+##   2   3  Group  Middle  After
+##   2   4  Group  Middle  After
+##   2   5  Group  Middle  After
+##   3   1  Group  Middle  After
+##   3   2  Group  Middle  After
+##   3   3  Group  Middle  After
+##   3   4  Group  Middle  After
+##   3   5  Group  Middle  After
+##   4   1  Group  Middle  After
+##   4   2  Group  Middle  After
+##   4   3  Group  Middle  After
+##   4   4  Group  Middle  After
+##   4   5  Group  Middle  After
+##   5   1  Group  Middle  After
+##   5   2  Group  Middle  After
+##   5   3  Group  Middle  After
+##   5   4  Group  Middle  After
+##   5   5  Group  Middle  After
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{no_miss =}\StringTok{ }\KeywordTok{complete}\NormalTok{(temp_no_miss,}\DecValTok{1}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(no_miss)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      Group           Middle          After       
+##  Min.   :1.000   Min.   :37.35   Min.   : 48.15  
+##  1st Qu.:1.000   1st Qu.:59.92   1st Qu.: 90.08  
+##  Median :2.000   Median :64.11   Median : 97.33  
+##  Mean   :1.505   Mean   :63.86   Mean   : 95.84  
+##  3rd Qu.:2.000   3rd Qu.:68.22   3rd Qu.:103.64  
+##  Max.   :2.000   Max.   :83.79   Max.   :120.41
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{all_col =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(dont_col, no_miss)}
+\KeywordTok{summary}\NormalTok{(all_col)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      Gender          Begin            Group           Middle     
+##  Min.   :1.000   Min.   : 61.15   Min.   :1.000   Min.   :37.35  
+##  1st Qu.:1.000   1st Qu.: 94.65   1st Qu.:1.000   1st Qu.:59.92  
+##  Median :2.000   Median :102.28   Median :2.000   Median :64.11  
+##  Mean   :1.504   Mean   :102.18   Mean   :1.505   Mean   :63.86  
+##  3rd Qu.:2.000   3rd Qu.:110.10   3rd Qu.:2.000   3rd Qu.:68.22  
+##  Max.   :2.000   Max.   :148.25   Max.   :2.000   Max.   :83.79  
+##  NA's   :7       NA's   :8                                       
+##      After       
+##  Min.   : 48.15  
+##  1st Qu.: 90.08  
+##  Median : 97.33  
+##  Mean   : 95.84  
+##  3rd Qu.:103.64  
+##  Max.   :120.41  
+## 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 1.75% of the gender data is missing. This can be included in the category which makes the highest part of the data, i.e. female.}
+
+\NormalTok{all_col}\OperatorTok{$}\NormalTok{Gender[}\KeywordTok{is.na}\NormalTok{(all_col}\OperatorTok{$}\NormalTok{Gender)] =}\StringTok{ }\DecValTok{2}
+
+\KeywordTok{summary}\NormalTok{(all_col)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      Gender          Begin            Group           Middle     
+##  Min.   :1.000   Min.   : 61.15   Min.   :1.000   Min.   :37.35  
+##  1st Qu.:1.000   1st Qu.: 94.65   1st Qu.:1.000   1st Qu.:59.92  
+##  Median :2.000   Median :102.28   Median :2.000   Median :64.11  
+##  Mean   :1.513   Mean   :102.18   Mean   :1.505   Mean   :63.86  
+##  3rd Qu.:2.000   3rd Qu.:110.10   3rd Qu.:2.000   3rd Qu.:68.22  
+##  Max.   :2.000   Max.   :148.25   Max.   :2.000   Max.   :83.79  
+##                  NA's   :8                                       
+##      After       
+##  Min.   : 48.15  
+##  1st Qu.: 90.08  
+##  Median : 97.33  
+##  Mean   : 95.84  
+##  3rd Qu.:103.64  
+##  Max.   :120.41  
+## 
+\end{verbatim}
+
+\hypertarget{outliers}{%
+\subsection{Outliers:}\label{outliers}}
+
+\begin{verbatim}
+a)  Include a summary of your mahal scores that are greater than the cutoff.
+b)  What are the df for your Mahalanobis cutoff?
+c)  What is the cut off score for your Mahalanobis measure?
+d)  How many outliers did you have?
+e)  Delete all outliers. 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    400 obs. of  5 variables:
+##  $ Gender: int  2 2 2 2 NA 2 2 2 2 2 ...
+##  $ Group : int  2 2 2 2 2 2 2 2 2 2 ...
+##  $ Begin : num  104.3 69.8 87.3 94.8 98.6 ...
+##  $ Middle: num  64 63.8 56.2 63.5 71 ...
+##  $ After : num  105.3 98.4 93 106.9 112.7 ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mahal =}\StringTok{ }\KeywordTok{mahalanobis}\NormalTok{(df,}
+                    \KeywordTok{colMeans}\NormalTok{(df, }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{),}
+                    \KeywordTok{cov}\NormalTok{(df, }\DataTypeTok{use =}\StringTok{"pairwise.complete.obs"}\NormalTok{)}
+\NormalTok{                    )}
+\NormalTok{mahal}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   [1]  2.119104  8.830011  5.519438  2.601957        NA  2.422871  2.943946
+##   [8]  3.360869        NA  3.621020  7.471393  3.951575 12.067588  4.488316
+##  [15]  5.870805  3.915221  2.776127  2.386089  3.236154  5.050891  2.962660
+##  [22]  5.885334  3.124271  4.201865  4.086583  2.941265  6.117275  3.698247
+##  [29]  4.533863        NA  2.651380  2.600056        NA  4.988668  3.117945
+##  [36]  3.708099  2.457453  4.651221  2.454487  4.759405  6.907456  3.980318
+##  [43]  4.190004  2.225036  3.748480  2.739460        NA  3.728022  3.040757
+##  [50]  2.424695  4.461577  2.115154  2.140412  8.431573  2.142840  2.791390
+##  [57]  2.116843  2.765013  4.556657  8.765377  3.360414  3.267953        NA
+##  [64]  2.128838  4.390724  4.475073  2.605085  4.325765 12.336428  2.207915
+##  [71]  2.584190        NA  2.661955  5.805030  2.453413  2.951139  3.712510
+##  [78]  1.994029  3.335658 10.706167  3.666654  2.142449  5.006652  6.157101
+##  [85]  3.974269  3.062191 16.201544  3.649124  4.334066  4.985869  3.529353
+##  [92]  6.004015  6.076693  2.249425  2.705543  3.361160  3.270767  2.926729
+##  [99]  5.755715  6.990626  7.173714  3.549332  2.948946        NA  8.518517
+## [106]  4.136092  2.450175  2.379309  2.730595  3.821596  9.580341  2.606764
+## [113]  3.609391  2.226159  3.347540  2.273886  5.588224        NA  4.137497
+## [120]  5.326721        NA  3.206669  2.246675  2.991385  2.503087  2.633774
+## [127]  6.865086  3.942256  2.197880  3.990695  2.870995  3.403774  2.413735
+## [134]  5.806070  3.896692  3.099024  2.740465  3.290273  2.985393  2.957081
+## [141]  3.189328        NA  2.271441  2.123273  3.880308  4.207920  3.080394
+## [148]  2.608917        NA  5.958266  3.895744  2.824464  4.749301  2.219865
+## [155]  5.039240  3.759660  4.954372  2.463658  3.343373  2.932952  3.259044
+## [162]  2.559134  2.972699  3.273328  2.846090  2.232258  3.593167  3.642436
+## [169]  3.416730  2.940499        NA  5.040486  3.696542  2.128219        NA
+## [176]  2.813276  3.777096  4.817503  4.317157  4.453846  2.272675  2.325252
+## [183]  4.439654  5.035557  2.986373  2.773726  2.644438  2.243300  5.389186
+## [190]  6.017634  2.497548        NA  4.458443  2.148517  4.227941  4.952210
+## [197]  2.027591        NA  5.312140  2.136140  7.205282  3.565995        NA
+## [204]  5.266738  3.502916  3.152993  5.145022  2.164085  2.981013        NA
+## [211]        NA  2.550798        NA  3.647571 11.217286  4.976638  2.223962
+## [218]  4.901398        NA  5.691891  7.027089  2.602362 10.197935  4.724542
+## [225]  9.092418  9.022271  2.244840  5.332073  2.924617  4.237010  4.202791
+## [232]  2.867819  8.852790  4.566574  4.961228        NA  3.335787  9.032479
+## [239]  9.035131  4.578903 12.211446  2.839520  2.163117  2.174070  7.736991
+## [246]  7.642014  4.663122  2.729076  2.816336  2.697274  7.731388  2.520385
+## [253]  2.271234  5.500816  3.236013        NA 10.687446 13.870397  3.026010
+## [260]  4.207013  6.935163  5.043693  4.474611  2.632476  3.930117  9.115690
+## [267]        NA        NA  3.165424  3.003715  5.566837  4.197144  3.718548
+## [274]  4.448562  2.777157  3.677807  3.564746  3.780657  3.370247  2.725319
+## [281]  4.472227  2.883062  3.822432  3.893917  4.498426        NA  2.675554
+## [288]  3.684786  2.694464  4.322950  4.537745  4.036772  8.534454  7.005065
+## [295]  7.950069  3.547742  4.745172  4.570119  2.372535  3.268382  8.041083
+## [302]  4.332182        NA  4.429742  4.631282  7.250926  2.964064  4.947775
+## [309] 15.893131  6.176277 25.485408  3.099840  6.383581 10.187722 13.107422
+## [316]  3.486312  8.099868        NA  3.998422  3.158112  5.291317 10.249895
+## [323]        NA  5.659839  6.779320        NA  5.929171        NA  2.474952
+## [330]  5.785466  2.615565  7.804848  4.395121  5.063853  8.511257        NA
+## [337] 13.594473  5.570771  3.503147  5.682606  6.250101  5.090837 13.367961
+## [344]  4.189634  6.618885  3.834064        NA  5.220922  5.391891  5.690258
+## [351]  3.774742  2.271095  5.131840  8.053363 13.896599  5.061825  3.345298
+## [358]  3.774156  7.834373  4.830780  7.448557  6.407978  2.507144 15.060041
+## [365]        NA        NA  7.590555 10.037492  2.404656  5.049187 13.756022
+## [372]  5.674828 11.391896  5.679818  5.458254  6.620003  2.883104 18.256153
+## [379]  8.643413  6.954078 13.202554  2.149113        NA  3.482893  6.248582
+## [386] 13.229000  7.798552  4.728369  5.014734  2.353180 13.542589 18.985441
+## [393] 12.735009  5.811748  2.264760  7.180049 25.667409  2.396676  8.056241
+## [400]        NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cutoff =}\StringTok{ }\KeywordTok{qchisq}\NormalTok{(}\DecValTok{1}\FloatTok{-.001}\NormalTok{,}\KeywordTok{ncol}\NormalTok{(df))}
+\KeywordTok{print}\NormalTok{(cutoff)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 20.51501
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(mahal }\OperatorTok{<}\StringTok{ }\NormalTok{cutoff)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Mode   FALSE    TRUE    NA's 
+## logical       2     361      37
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{noout =}\StringTok{ }\KeywordTok{subset}\NormalTok{(df, mahal }\OperatorTok{<}\StringTok{ }\NormalTok{cutoff)}
+\KeywordTok{str}\NormalTok{(noout)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    361 obs. of  5 variables:
+##  $ Gender: int  2 2 2 2 2 2 2 2 2 2 ...
+##  $ Group : int  2 2 2 2 2 2 2 2 2 2 ...
+##  $ Begin : num  104.3 69.8 87.3 94.8 97.2 ...
+##  $ Middle: num  64 63.8 56.2 63.5 66.9 ...
+##  $ After : num  105.3 98.4 93 106.9 106.4 ...
+\end{verbatim}
+
+\hypertarget{assumptions}{%
+\section{Assumptions:}\label{assumptions}}
+
+\hypertarget{additivity}{%
+\subsection{Additivity:}\label{additivity}}
+
+\begin{verbatim}
+a)  Include the symnum bivariate correlation table of your continuous measures.
+b)  Do you meet the assumption for additivity?
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Additivity }
+\KeywordTok{cor}\NormalTok{(all_col)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             Gender Begin       Group      Middle     After
+## Gender  1.00000000    NA -0.01030654 -0.01795643 0.0279284
+## Begin           NA     1          NA          NA        NA
+## Group  -0.01030654    NA  1.00000000  0.17891576 0.5528950
+## Middle -0.01795643    NA  0.17891576  1.00000000 0.1803121
+## After   0.02792840    NA  0.55289502  0.18031208 1.0000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(corrplot)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## corrplot 0.84 loaded
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{corrplot}\NormalTok{(}\KeywordTok{cor}\NormalTok{(all_col))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{06_lab_files/figure-latex/additivity-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{symnum}\NormalTok{(}\KeywordTok{cor}\NormalTok{(all_col))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        Gn B Gr M A
+## Gender 1          
+## Begin  ?  1       
+## Group     ? 1     
+## Middle    ?    1  
+## After     ? .    1
+## attr(,"legend")
+## [1] 0 ' ' 0.3 '.' 0.6 ',' 0.8 '+' 0.9 '*' 0.95 'B' 1 \t    ## NA: '?'
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#yes, it meets the assumption of additivity to some extent with a stronger positive relationship between Group and After.}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{linearity}{%
+\subsection{Linearity:}\label{linearity}}
+
+\begin{verbatim}
+a)  Include a picture that shows how you might assess multivariate linearity.
+b)  Do you think you've met the assumption for linearity?
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Linearity}
+\NormalTok{random =}\StringTok{ }\KeywordTok{rchisq}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(all_col), }\DecValTok{400}\NormalTok{)}
+\NormalTok{fake =}\StringTok{ }\KeywordTok{lm}\NormalTok{(random}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ all_col)}
+\KeywordTok{summary}\NormalTok{(fake)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = random ~ ., data = all_col)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -78.987 -19.725  -1.166  17.189 108.893 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 413.19251   21.00832  19.668   <2e-16 ***
+## Gender       -2.90916    2.91605  -0.998   0.3191    
+## Begin        -0.19668    0.11673  -1.685   0.0928 .  
+## Group        -0.17685    3.53396  -0.050   0.9601    
+## Middle        0.08603    0.22786   0.378   0.7060    
+## After         0.06775    0.15619   0.434   0.6647    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 28.75 on 384 degrees of freedom
+##   (8 observations deleted due to missingness)
+## Multiple R-squared:  0.01066,    Adjusted R-squared:  -0.002222 
+## F-statistic: 0.8275 on 5 and 384 DF,  p-value: 0.5307
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{standardized =}\StringTok{ }\KeywordTok{rstudent}\NormalTok{(fake)}
+\KeywordTok{qqnorm}\NormalTok{(standardized)}
+\KeywordTok{abline}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{06_lab_files/figure-latex/linearity-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#yes I think we've met the assumption for linearity.}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{normality}{%
+\subsection{Normality:}\label{normality}}
+
+\begin{verbatim}
+a)  Include a picture that shows how you might assess multivariate normality.
+b)  Do you think you've met the assumption for normality? 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(moments)}
+\CommentTok{#Normality}
+\KeywordTok{skewness}\NormalTok{(all_col,}\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      Gender       Begin       Group      Middle       After 
+## -0.05026713  0.18527467 -0.02010152 -0.33670471 -0.96210998
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{kurtosis}\NormalTok{(all_col,}\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Gender    Begin    Group   Middle    After 
+## 1.002527 3.773202 1.000404 3.694090 4.536327
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{hist}\NormalTok{(standardized, }\DataTypeTok{breaks =} \DecValTok{20}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{06_lab_files/figure-latex/normality-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#yes, it is very close to being a normal distribution and I have met the assumption of normality.}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{homogeneityhomoscedasticity}{%
+\subsection{Homogeneity/Homoscedasticity:}\label{homogeneityhomoscedasticity}}
+
+\begin{verbatim}
+a)  Include a picture that shows how you might assess multivariate homogeneity.
+b)  Do you think you've met the assumption for homogeneity?
+c)  Do you think you've met the assumption for homoscedasticity?
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Homogeneity, Homoscedasticity}
+
+\CommentTok{#Making the fit values standardized}
+\NormalTok{fitvalues =}\StringTok{ }\KeywordTok{scale}\NormalTok{(fake}\OperatorTok{$}\NormalTok{fitted.values)}
+
+\CommentTok{#Plot the values}
+\KeywordTok{plot}\NormalTok{(fitvalues, standardized) }
+\KeywordTok{abline}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v =} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{06_lab_files/figure-latex/homog-s-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Alternative diagram}
+
+\KeywordTok{plot}\NormalTok{(fake,}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{06_lab_files/figure-latex/homog-s-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Homogeneity - }
+
+\CommentTok{#The difference in the spread above and below the line is 1 and we meet the assumption of Homogeneity to some extent.}
+
+\CommentTok{#The difference in the spread across the x axis is very close to even with a slight heavier distribution towards the left side as compared to the right side given us the assumption of Homoscedasticity to some extent.}
+\end{Highlighting}
+\end{Shaded}
+
+\end{document}

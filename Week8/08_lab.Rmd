@@ -1,0 +1,498 @@
+---
+title: "Regression, Mediation, Moderation"
+author: "Karmanya Pathak"
+date: '`r Sys.Date()`'
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*Title*: The influence of cognitive and affective based job satisfaction measures on the relationship between satisfaction and organizational citizenship behavior
+
+*Abstract*: One of the most widely believed maxims of management is that a happy worker is a productive worker. However, most research on the nature of the relationship between job satisfaction and job performance has not yielded convincing evidence that such a relationship exists to the degree most managers believe. One reason for this might lie in the way in which job performance is measured. Numerous studies have been published that showed that using Organizational Citizenship Behavior to supplant more traditional measures of job performance has resulted in a more robust relationship between job satisfaction and job performance. Yet, recent work has suggested that the relationship between job satisfaction and citizenship may be more complex than originally reported. This study investigated whether the relationship between job satisfaction and citizenship could depend upon the nature of the job satisfaction measure used. Specifically, it was hypothesized that job satisfaction measures which reflect a cognitive basis would be more strongly related to OCB than measures of job satisfaction, which reflect an affective basis. Results from data collected in two midwestern companies show support for the relative importance of cognition based satisfaction over affect based satisfaction. Implications for research on the causes of citizenship are discussed.
+
+# Dataset:
+    
+    - Dependent variable (Y): OCB - Organizational citizenship behavior measure
+    -	Independent variables (X)
+        - Affective - job satisfaction measures that measure emotion
+        - Cognitive - job satisfaction measures that measure cognitions (thinking)
+        -	Years - years on the job
+        -	Type_work - type of employee measured (secretary, assistant, manager, boss)	
+
+# Data Screening:
+
+Assume the data is accurate with no missing values.  You will want to screen the dataset using all the predictor variables to predict the outcome in a simultaneous multiple regression (all the variables at once).  This analysis will let you screen for outliers and assumptions across all subsequent analyses/steps. Be sure to factor type_work.
+
+```{r starting}
+#install.packages("haven")
+library(haven)
+
+df2 <- read_sav("D:/Harrisburg/Lectures/Spring 2020/ANLY 500 - Principles of Analytics I/Assignment 8/08_data.sav")
+
+df <- df2
+
+
+df$type_work <- factor(df$type_work, levels =  c(1,2,3,4))
+
+model1 <- lm(OCB ~ affective + cognitive + years + type_work, data = df)
+
+
+```
+
+## Outliers
+    
+    a.	Leverage:
+        i.	What is your leverage cut off score?
+        ii.	How many leverage outliers did you have?
+
+```{r leverage}
+
+k = 4 ##number of IVs
+leverage = hatvalues(model1)
+cutleverage = (2*k+2) / nrow(df) #cutoff
+cutleverage
+#leverage cutoff score is 0.0625
+
+badleverage = as.numeric(leverage > cutleverage)
+table(badleverage)
+
+#From the table of bad leverage, 25 observations are leverage outliers
+
+
+```
+        
+    b.	Cook's:
+        i.	What is your Cook's cut off score?
+        ii.	How many Cook's outliers did you have?
+        
+```{r cooks}
+
+cooks = cooks.distance(model1)
+cutcooks = 4 / (nrow(df) - k - 1) #cutoff
+cutcooks
+
+# Cook's cut off score is 0.02580645
+
+badcooks = as.numeric(cooks > cutcooks)
+badcooks
+table(badcooks)
+
+#We have 9 Cook's outlier
+
+```
+        
+    c.	Mahalanobis:
+        i.	What is your Mahalanobis df?
+        ii.	What is your Mahalanobis cut off score?
+        iii.	How many outliers did you have for Mahalanobis?
+        
+```{r mahal}
+
+#i.
+#Mahanobolis df are: type_work, OCB, cognitive, affective, years
+
+df1 <- df2 #For Mahanabolis, we need all the variables to be numeric, hence I am taking the original dataset where type_work is numeric.
+
+mahal = mahalanobis(df1, 
+                    colMeans(df1), 
+                    cov(df1))
+
+cutmahal = qchisq(1-.001, ncol(df1))
+
+cutmahal
+
+#ii.
+#Mahalanobis cut off score is 20.51501
+
+#iii.
+badmahal = as.numeric(mahal > cutmahal) ##cutoff
+table(badmahal)
+
+#We had 0 outliers for Mahalanobis
+
+```
+        
+    d.	Overall:
+        i.	How many total outliers did you have across all variables?
+        ii.	Delete them!
+
+```{r overall}
+
+#i.
+
+k = 4 ##number of IVs
+leverage = hatvalues(model1)
+
+cutleverage = (2*k+2) / nrow(df)
+cutleverage
+
+badleverage = as.numeric(leverage > cutleverage)
+table(badleverage)
+
+#25 total outliers
+
+#ii.
+
+df3 <- df1 #A new temporary dataframe df3
+
+df3$leverage <- leverage #Adding column leverage in a new temporary dataframe df3 
+
+df4 <- df3[df3$leverage < cutleverage,] # deleted outliers and saved it in a new dataframe df4
+
+```
+
+# Assumptions:
+
+## Additivity:
+
+    a.	Include a correlation table of your independent variables.
+    b.	Do your correlations meet the assumption for additivity (i.e. do you have multicollinearity)?
+
+```{r additivity}
+#a.
+
+library(corrplot)
+ivdf <- subset(df4[,-2])
+corrplot(cor(ivdf)) #Since corrplot requires all numeric variables, I am using df1 dataframe which I created for Mahalanobis 
+
+#b.
+
+#Yes, the correlations meet the assumption for additivity and we have multiple collinearity as we can see high coorelation between type_work, cognitive and affective and low coorelation between type_work and leverage; and cognitive and leverage.
+
+```
+
+## Linearity: 
+
+    a.	Include a picture that shows how you might assess multivariate linearity.
+    b.	Do you think you've met the assumption for linearity? 
+
+```{r linearity}
+
+#a.
+
+random = rchisq(nrow(df4), 154)
+fake = lm(random~., data = df4)
+summary(fake)
+standardized = rstudent(fake)
+qqnorm(standardized)
+abline(0,1)
+
+#b.
+
+#Yes, I think we have met the assumption for linearity as we only stray away from the abline for normality towards the tails and just a few assumed outliers.
+
+```
+
+## Normality: 
+
+    a.	Include a picture that shows how you might assess multivariate normality.
+    b.	Do you think you've met the assumption for normality? 
+
+```{r normality}
+
+#a.
+
+library(moments)
+#skewness
+skewness(df4, na.rm=TRUE)
+
+#kurtosis
+kurtosis(df4, na.rm=TRUE)
+
+hist(standardized, breaks=15)
+
+#b.
+
+#yes it has fairly met the assumption for normality since there is a fairly even distribution of observations of both sides of the value 0.
+
+
+```
+
+## Homogeneity and Homoscedasticity: 
+
+    a.	Include a picture that shows how you might assess multivariate homogeneity.
+    b.	Do you think you've met the assumption for homogeneity?
+    c.	Do you think you've met the assumption for homoscedasticity?
+    
+```{r homogs}
+
+#a.
+
+fitvalues = scale(fake$fitted.values)
+
+plot(fitvalues, standardized) 
+abline(0,0)
+abline(v = 0)
+
+plot(fake,1)
+
+#b.
+
+#Yes we've met the assumption for homogenity as we have a fairly equal spread on both sides of 0 on the y-axis.
+
+#c.
+
+#Using both the graphs below, we can say that the spread is not exactly equal across the x axis. But since it is not extremely skewed, we can say that we have met the assumption for homoscedasticity.
+
+```
+
+# Hierarchical Regression:
+
+    a.	First, control for years on the job in the first step of the regression analysis.
+    b.	Then use the factor coded type of job variable to determine if it has an effect on organizational citizenship behavior.
+    c.	Last, test if cognitive and affect measures of job satisfaction are predictors of organizational citizenship behavior. 
+    d.  Include the summaries of each step, along with the ANOVA of the change between each step.
+    
+```{r hierarchical}
+
+#a.
+
+model2 = lm(OCB ~ years, data = df)
+
+#b.
+
+model3 = lm(OCB ~ years + type_work, data = df)
+
+#c.
+
+model4 = lm(OCB ~ years + cognitive, data = df)
+
+#d.
+
+summary(model2)
+summary(model3)
+summary(model4)
+
+anova(model2,model3)
+anova(model2,model4)
+anova(model3,model4)
+
+```
+
+# Mediation
+
+    a.  Calculate a mediation model wherein the number of years mediates the relationship between affective measurements and OCB.
+    b.  Include each path and summaries of those models.
+    c.  Include the Sobel test.
+    d.  Include the bootstrapped indirect effect. 
+
+```{r mediation}
+
+#a.
+
+modelc <- lm(OCB ~ affective, data = df)
+modela <- lm(years ~ affective, data = df)
+modelbcdash <- lm(OCB ~ affective + years, data = df)
+
+#b.
+
+summary(modelc)
+
+#For the c path: b = 0.15, t(157) = 7.09, p < 0.001
+
+summary(modela)
+
+#For the a path: b = 0.0014, t(157) = 0.37, p = 0.71
+
+summary(modelbcdash)
+
+#For the b path: b = -0.045, t(157) = -0.105, p = 0.916
+
+#For the c' path: b = 0.15, t(157) = 7.07, p < 0.001
+
+#c.
+
+a = coef(modela)[2]
+b = coef(modelbcdash)[3]
+SEa = summary(modela)$coefficients[2,2]
+SEb = summary(modelbcdash)$coefficients[3,2]
+zscore = (a*b)/(sqrt((b^2*SEa^2)+(a^2*SEb^2)+(SEa*SEb)))
+zscore
+
+
+pnorm(abs(zscore), lower.tail = F)*2
+
+
+#d.
+
+indirectsaved = function(formula2, formula3, dataset, random) {
+  d = dataset[random, ] #randomize by row
+  modela = lm(formula2, data = d)
+  modelbcdash = lm(formula3, data = d)
+  a = coef(model2)[2]
+  b = coef(model3)[3]
+  indirect = a*b
+  return(indirect)
+}
+
+
+library(boot)
+
+bootresults = boot(data = df,
+                   statistic = indirectsaved,
+                   formula2 = years ~ affective,
+                   formula3 = OCB ~ affective + years,
+                   R = 1000)
+
+bootresults
+
+boot.ci(bootresults,
+        conf = .95,
+        type = "norm")
+
+
+```
+
+# Write up:
+    
+    Hierarchical regression only!
+    a.	Include a brief description of the experiment, variables, and order entered into steps.
+    
+
+    The experiment was to understand the effects of the independent variables on organizational citizenship behavior. The variables used were years     on job, factored version of type of work and cognitive variable, a job satisfaction that measures cognitions.
+
+    The first regression model (model2) gives controls for years on job before testing if type of work has significant effect on OCB.
+
+    In the second regression model (model3), we leave the years variable or we would be controlling for it, and use the factored coded variable type     of variable.
+
+    In the third regression model (model4), we leave the years variable or we would be controlling for it, and use the cognitive variable.
+
+    Then we summarized each model to determine the significance of the variables on OCB.
+
+    Then we compared the models using the anova() function to show whether the addition of the variables added significance to the equation and its'     effect on OCB.
+    
+    
+    b.	Include a brief section on the data screening/assumptions.
+    
+    For Data screening, we factored the type_work variable, and started checking for outliers using the leverage, cooks and mahalanobis method.
+    
+    We went on to delete the outliers and then had assumptions using Additivity, Linearity, Normality, Homogeneity and Homoscedasticity and then        went on to create regressions.
+    
+    
+    c.	Include the all F-values for each step of the model - you can reference the above table.
+    
+    Refer section Mediation:
+    
+    Model 2:
+    F-statistic: 50.23 on 1 and 158 DF,  p-value: 4.285e-11
+
+    Model 3:
+    F-statistic: 0.1388 on 1 and 158 DF,  p-value: 0.7099
+
+    Model 4:
+    F-statistic: 24.96 on 2 and 157 DF,  p-value: 3.863e-10
+
+    
+    d.	Include all the b or beta values for variables in the step they were entered.  So, you will not have double b values for any predictor - you can reference the above table.
+  
+  Model 2:
+  
+  For every 1 unit increase in OCB, there is 0.0446 unit increase in years.
+    
+    Call:
+lm(formula = OCB ~ years, data = df)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-28.456  -3.821   1.584   6.024  18.734 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  86.1726     4.0101  21.489   <2e-16 ***
+years         0.0446     0.4902   0.091    0.928    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 9.95 on 158 degrees of freedom
+Multiple R-squared:  5.237e-05,	Adjusted R-squared:  -0.006276 
+F-statistic: 0.008275 on 1 and 158 DF,  p-value: 0.9276
+
+
+
+Model3:
+
+With every 1 unit increase in OCB, there is 0.3242 unit increase in years, 12.0597 units increase in type_work2, 16.9565 units increase in type_work3 and 24.7188 unites increase in type_work4
+
+Call:
+lm(formula = OCB ~ years + type_work, data = df)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-15.0439  -2.2372  -0.1912   2.1675  15.1475 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  70.4964     1.8290  38.544   <2e-16 ***
+years         0.3242     0.2111   1.536    0.127    
+type_work2   12.0597     0.9489  12.709   <2e-16 ***
+type_work3   16.9565     0.9504  17.841   <2e-16 ***
+type_work4   24.7188     0.9516  25.976   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 4.243 on 155 degrees of freedom
+Multiple R-squared:  0.8216,	Adjusted R-squared:  0.817 
+F-statistic: 178.5 on 4 and 155 DF,  p-value: < 2.2e-16
+
+
+
+Model 4:
+
+With every 1 unit increase in OCB, there is 0.28865 units increase in years and 0.49540 increase in cognitive.
+
+
+Call:
+lm(formula = OCB ~ affective + years, data = df)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-27.639  -2.626   1.700   5.525  18.135 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 83.50504    3.52451  23.693  < 2e-16 ***
+affective    0.14610    0.02068   7.065 4.93e-11 ***
+years       -0.04512    0.42858  -0.105    0.916    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 8.695 on 157 degrees of freedom
+Multiple R-squared:  0.2413,	Adjusted R-squared:  0.2316 
+F-statistic: 24.96 on 2 and 157 DF,  p-value: 3.863e-10
+
+
+
+    
+    
+    e.	Include an interpretation of the results (dummy coding, do our results match the study results, etc.).
+
+    Since we factored the type_work variable, R did the dummy coding for us automatically. 
+    
+    After creating 3 models, we compared the models using the Anova function and compared the change in R squared values to check whether there is a     change in R squared values. A positive change indicates that the addition of a variable added significantly to the equation.
+
+
+
+
+Change in R square between Model 2 and Model 3:
+
+R square (Model 3) - R square (Model 2) = 0.8216 - 5.237e-05 = 0.82
+
+Change in R square between Model 2 and Model 4:
+
+R square (Model 4) - R square (Model 2) = 0.2413 - 5.237e-05 = 0.24
+
+Change in R square between Model 3 and Model 4:
+
+R square (Model 4) - R square (Model 3) = 0.2413 - 0.8216 = -0.5803
+
+The above calculations states that Model 3 has the highest R squared value of 0.8216 meaning years of work and type of work has the highest significance on OCB.
+
+
+
+
+

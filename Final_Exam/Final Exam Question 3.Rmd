@@ -1,0 +1,425 @@
+---
+title: "Final Exam Question 3"
+author: "Karmanya Pathak"
+date: "4/25/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+(1) ANOVA:
+
+Capture an ANOVA model on the iris dataset. Set the dependent variable to 'Species'.
+Capture a summary. 
+Provide an interpretation of the results in your own words.  Support your response with results captured from running ANOVA.
+
+
+- id: ID
+- Species: 3 Species of flowers
+- Sepal.Length: Sepal length in cms
+- Sepal.width: Sepal width in cms
+- Petal.Length: Petal length in cms
+- Petal.Width: Petal width in cms
+
+```{r iris}
+
+iris_data <- read.csv("D:/Harrisburg/Lectures/Spring 2020/ANLY 500 - Principles of Analytics I/Final Exam/Question 3/iris_exams.csv")
+
+#Using a copy of the dataset in case we need to access the original data
+
+iris_q3 <- iris_data
+
+summary(iris_q3)
+
+
+```
+
+
+
+```{r library}
+
+#Loading all the libraries
+
+library(MOTE)
+library(reshape)
+library(pwr)
+library(ggplot2)
+library(corrplot)
+library(moments)
+library(biotools)
+library(ez)
+library(biotools)
+library(knitr)
+library(kableExtra)
+
+
+#Use the template for the plots
+
+cleanup = theme(panel.grid.major = element_blank(), 
+                panel.grid.minor = element_blank(), 
+                panel.background = element_blank(), 
+                axis.line.x = element_line(color = "black"),
+                axis.line.y = element_line(color = "black"),
+                legend.key = element_rect(fill = "white"),
+                text = element_text(size = 15))
+  
+
+
+
+```
+
+
+## Data Screening:
+
+## Accuracy, Missing Data:
+
+The data is clean and no missing data (NAs).
+
+Since there are no missing values, there is no need to omit any observations.
+
+```{r Data Screening}
+
+#Accuracy, missing data
+
+summary(iris_q3)
+
+
+
+```
+
+
+## Outliers:
+
+The cut off score for the mahalanobis measure is 18.46683
+
+There were 2 outliers in the dataset
+
+
+```{r Outliers}
+
+# Since we can calculatate means of variables using mahalanobis(in general as well) on only numeric variables, 
+# we would be ignoring factor variables id and Species
+
+mahal = mahalanobis(iris_q3[,-c(1,2)], colMeans(iris_q3[,-c(1,2)]), cov(iris_q3[,-c(1,2)]))
+
+#Calculating the cutoff score
+
+cutoff = qchisq(0.999, ncol(iris_q3[,-c(1,2)]))
+
+
+#Degrees of freedom
+
+#ncol(iris[,-c(1,2)])
+
+#Printing the cutoff score
+
+cutoff
+
+#Checking to see number of outliers in iris
+
+summary(mahal > cutoff)
+
+#Creating a new dataframe without the 2 outliers
+
+iris_no_outliers_q3 <- subset(iris_q3, mahal < cutoff)
+
+#Checking the new dataframe without the outliers
+
+str(iris_no_outliers_q3)
+
+summary(iris_no_outliers_q3)
+
+
+```
+
+
+## Assumptions:
+
+## Additivity:
+
+The model meets the assumption for additivity, and we have multicollinearity.
+
+```{r }
+iris_numeric <- iris_no_outliers_q3[,c(3:6)]
+
+
+corrplot(cor(iris_numeric))
+
+cor(iris_numeric)
+
+
+```
+
+## Linearity: 
+
+I think the model meets the assumption for linearity.
+
+We are deviating from linearity, but there are not enough points to dismiss or violate linearity.
+
+```{r linearity}
+
+#We are removing one factor variable id to run a linear model
+
+iris_no_id_q3 <- iris_q3[,-1]
+
+
+random <- rchisq(nrow(iris_no_id_q3),4)
+fake <- lm(random~., data = iris_no_id_q3)
+#summary(fake)
+standardized <- rstudent(fake)
+fitted <- scale(fake$fitted.values)
+
+#Generating the linearity graph
+
+{qqnorm(standardized)
+abline(0,1)}
+
+
+
+
+```
+
+
+## Normality: 
+
+
+Although we have a slight skew in the data, it is not enough to violate normality.
+
+
+```{r normality}
+
+
+hist(standardized, breaks=15)
+
+
+```
+
+
+## Homogeneity/Homoscedasticity: 
+
+# Homogeneity:
+
+Using Box's M test, we find that p < 0.001, stating that we haven't met the assumption for Homogeneity.
+
+
+#Homoscedasticity:
+
+Apart from a few observations, the scatter is fairly equal from the lowest point to the largest point, letting us accept the assumption for homoscedasticity.
+
+
+
+
+```{r homog-s}
+
+
+#Plotting the values:
+
+plot(fitted, standardized) 
+abline(0,0)
+abline(v = 0)
+
+#Using Box's test to check for Homogeneity
+
+boxM(iris_no_id_q3[,-1], iris_no_id_q3[,1])
+
+
+
+
+```
+
+
+## Analysis of Variance
+
+Capture an ANOVA model on the iris dataset. Set the dependent variable to 'Species'.
+Capture a summary. 
+Provide an interpretation of the results in your own words.  Support your response with results captured from running ANOVA.
+
+The omnibus ANOVA test was significant, since p value is low (<0.05)
+
+
+
+
+```{r AOV}
+
+##you must have a participant number for ezANOVA
+iris_no_outliers_q3$partno = 1:nrow(iris_no_outliers_q3)
+
+options(scipen = 999)
+ezANOVA(data = iris_no_outliers_q3,
+        dv = Sepal.Length,
+        between = Species,
+        wid = partno,
+        type = 3, 
+        detailed = T)
+
+# Since Homogeneity was bad
+
+oneway.test(Sepal.Length ~ Species, data = iris_no_outliers_q3)
+
+
+aovModel1 <- ezANOVA(data = iris_no_outliers_q3,
+        dv = Sepal.Length,
+        between = Species,
+        wid = partno,
+        type = 3, 
+        detailed = T)
+
+
+# Coeeficient covariances 
+
+aovModel1
+
+
+```
+
+
+## Effect Sizes:
+
+The effect size is large
+
+```{r effect sizes}
+
+eta <- aovModel1$ANOVA$ges[2]
+
+eta
+
+## formula = (SSM - dfM*MSR)/ (SStotal + MSR)
+
+MSR <- aovModel1$ANOVA$SSd[2] / aovModel1$ANOVA$DFd[2]
+
+w2 <- (aovModel1$ANOVA$SSn[2] - aovModel1$ANOVA$DFn[2]*MSR) / (aovModel1$ANOVA$SSn[2] + aovModel1$ANOVA$SSd[2] + MSR)
+w2
+
+```
+
+## Post Hoc t-test
+
+
+```{r posthoc}
+
+pairwise.t.test(iris_no_outliers_q3$Sepal.Length,
+                iris_no_outliers_q3$Species,
+                p.adjust.method = "none", 
+                paired = F, 
+                var.equal = T)
+
+pairwise.t.test(iris_no_outliers_q3$Sepal.Length,
+                iris_no_outliers_q3$Species,
+                p.adjust.method = "bonferroni", 
+                paired = F, 
+                var.equal = T)
+
+#Unequal variances
+
+post1 <- pairwise.t.test(iris_no_outliers_q3$Sepal.Length,
+                iris_no_outliers_q3$Species,
+                p.adjust.method = "none", 
+                paired = F, 
+                var.equal = F)
+
+post2 <- pairwise.t.test(iris_no_outliers_q3$Sepal.Length,
+                iris_no_outliers_q3$Species,
+                p.adjust.method = "bonferroni", 
+                paired = F, 
+                var.equal = F)
+
+```
+
+
+#Effect Sizes:
+
+Using d from the ANOVA test to calculate effect sizes
+
+
+```{r effectsize}
+
+M <- with(iris_no_outliers_q3, tapply(Sepal.Length, Species, mean))
+stdev <- with(iris_no_outliers_q3, tapply(Sepal.Length, Species, sd))
+N <- with(iris_no_outliers_q3, tapply(Sepal.Length, Species, length))
+
+## Setosa vs Versicolor is 1 and 2
+effect1 = d.ind.t(m1 = M[1], m2 = M[2],        
+sd1 = stdev[1], sd2 = stdev[2],        
+n1 = N[1], n2 = N[2], a = .05)
+effect1$d
+
+
+
+```
+
+# Creating a tabular view by Type of Post Hoc:
+
+```{r table, results='asis'}
+
+
+tableprint = matrix(NA, nrow = 3, ncol = 2)
+
+##row 1
+tableprint[1, ] = c("No correction p", post1$p.value[1])
+
+##row 2
+tableprint[2, ] = c("Bonferroni p", post2$p.value[1])
+
+##row 3
+tableprint[3, ] = c("d value", effect1$d)
+
+#don't change this
+kable(tableprint, 
+      digits = 3,
+      col.names = c("Type of Post Hoc", 
+                    "Setosa vs Versicolor"))
+```
+
+
+#Running a trend analysis:
+
+This is a significant trend since the p value is low, we have a high adjusted R-squared value and the significant code values are 0 and 0.001 implying high significance.
+
+
+```{r trend}
+#Trend Analysis
+
+k = 3
+iris_no_outliers_q3$part <- iris_no_outliers_q3$Species
+contrasts(iris_no_outliers_q3$part) = contr.poly(k)
+output2 = aov(Sepal.Length ~ part, data = iris_no_outliers_q3)
+summary.lm(output2)
+
+
+```
+
+#Bar Chart
+
+The Sepal length of Virginica species is comparatively higher than the other two species.
+
+```{r graph}
+
+bargraph = ggplot(iris_no_outliers_q3, aes(Species, Sepal.Length))
+bargraph +
+  cleanup +
+  stat_summary(fun = mean, 
+               geom = "bar", 
+               fill = "White", 
+               color = "Black") +
+  stat_summary(fun.data = mean_cl_normal, 
+               geom = "errorbar", 
+               width = .2, 
+               position = "dodge") +
+  xlab("Species") +
+  ylab("Sepal Length") +
+  coord_cartesian(ylim = c(0,7)) +
+  scale_x_discrete(labels = c("Setosa","Versicolor","Virginica"))
+
+
+
+```
+
+
+
+
+
+
+

@@ -1,0 +1,293 @@
+---
+title: "Final Exam - Question 1"
+author: "Karmanya Pathak"
+date: "4/25/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Correlation Analysis:
+
+Perform data screening making sure to check for accuracy, missing, outliers. (Done)
+Perform assumption checks for linearity, normality, homogeneity, and homoscedasticity.
+Capture a Correlation Matrix and Visual to express the relationship between each of the variables in the iris dataset.  
+What is the correlated effect? Provide an interpretation in your own words. Support your response with results captured from the correlation analysis.  
+Calculate the Variance. What does it tell us?
+Calculate the Covariance. What does it tell us?
+
+
+
+## Final Exam Question 4: Correlation Analysis
+
+- id: ID
+- Species: 3 Species of flowers
+- Sepal.Length: Sepal length in cms
+- Sepal.width: Sepal width in cms
+- Petal.Length: Petal length in cms
+- Petal.Width: Petal width in cms
+
+```{r iris}
+
+iris_data <- read.csv("D:/Harrisburg/Lectures/Spring 2020/ANLY 500 - Principles of Analytics I/Final Exam/Question 1/iris_exams.csv")
+
+#Using a copy of the dataset in case we need to access the original data
+
+iris_q1 <- iris_data
+
+summary(iris_q1)
+  
+
+```
+
+
+## Hypothesis:
+
+- Null Hypothesis H0 : Sepal.Length has no effect on Species (Setosa & Versicolor Only). That is to say that the difference between the observed Sepal.Length values for various Species are not statistically different
+
+- Alternate Hypothese Ha : Sepal.Length has some effect on Species (Setosa & Versicolor Only). That is to say that the difference between the observed Sepal.Length values for various Species are in fact different from each other.
+
+```{r library}
+
+#Loading all the libraries
+
+library(MOTE)
+library(reshape)
+library(pwr)
+library(ggplot2)
+library(corrplot)
+library(moments)
+library(biotools)
+
+
+#Use the template for the plots
+
+cleanup = theme(panel.grid.major = element_blank(), 
+                panel.grid.minor = element_blank(), 
+                panel.background = element_blank(), 
+                axis.line.x = element_line(color = "black"),
+                axis.line.y = element_line(color = "black"),
+                legend.key = element_rect(fill = "white"),
+                text = element_text(size = 15))
+  
+
+
+
+```
+
+
+## Data Screening:
+
+## Accuracy, Missing Data:
+
+The data is clean and no missing data (NAs).
+
+Since there are no missing values, there is no need to omit any observations.
+
+```{r Data Screening}
+
+#Accuracy, missing data
+
+summary(iris_q1)
+
+```
+
+
+## Outliers:
+
+The cut off score for the mahalanobis measure is 18.46683
+
+There were 2 outliers in the dataset
+
+
+```{r Outliers}
+
+# Since we can calculatate means of variables using mahalanobis(in general as well) on only numeric variables, 
+# we would be ignoring factor variables id and Species
+
+mahal = mahalanobis(iris_q1[,-c(1,2)], colMeans(iris_q1[,-c(1,2)]), cov(iris_q1[,-c(1,2)]))
+
+#Calculating the cutoff score
+
+cutoff = qchisq(0.999,ncol(iris_q1[,-c(1,2)]))
+
+
+#Printing the cutoff score
+
+cutoff
+
+#Checking to see number of outliers in iris
+
+summary(mahal > cutoff)
+
+#Creating a new dataframe without the 2 outliers
+
+iris_no_outliers_q1 <- subset(iris_q1, mahal < cutoff)
+
+#Checking the new dataframe without the outliers
+
+str(iris_no_outliers_q1)
+
+summary(iris_no_outliers_q1)
+
+
+```
+
+
+
+
+## Assumptions:
+
+## Additivity:
+
+The model meets the assumption for additivity, and we have multicollinearity.
+
+```{r }
+
+corrplot(cor(iris_no_outliers_q1[,-c(1,2)]))
+
+cor(iris_no_outliers_q1[,-c(1,2)])
+
+```
+
+
+
+
+## Linearity: 
+
+I think the model meets the assumption for linearity.
+
+We are deviating from linearity, but there are not enough points to dismiss or violate linearity.
+
+```{r linearity}
+
+#We are removing one factor variable id to run a linear model
+
+iris_no_id_q1 <- iris_no_outliers_q1[,-1]
+
+
+random <- rchisq(nrow(iris_no_id_q1),4)
+fake <- lm(random~., data = iris_no_id_q1)
+#summary(fake)
+standardized <- rstudent(fake)
+fitted <- scale(fake$fitted.values)
+
+#Generating the linearity graph
+
+{qqnorm(standardized)
+abline(0,1)}
+
+
+
+
+```
+
+
+
+## Normality: 
+
+
+Although we have a slight skew in the data, it is not enough to violate normality.
+
+
+```{r normality}
+
+
+hist(standardized, breaks=15)
+
+
+```
+
+
+
+
+## Homogeneity/Homoscedasticity: 
+
+# Homogeneity:
+
+Using Box's M test, we find that p < 0.001, stating that we haven't met the assumption for Homogeneity.
+
+
+#Homoscedasticity:
+
+Apart from a few observations, the scatter is fairly equal from the lowest point to the largest point, letting us accept the assumption for homoscedasticity.
+
+
+
+
+```{r homog-s}
+
+#Plotting the values:
+
+plot(fitted, standardized) 
+abline(0,0)
+abline(v = 0)
+
+#Using Box's test to check for Homogeneity
+
+boxM(iris_no_id_q1[,-1], iris_no_id_q1[,1])
+
+```
+
+
+Variances explains how much their scores deviate from the means of different variables.
+
+The variance between themselves and different variables are as follows:
+- Variance for Sepal length is moderately positive, Sepal width is fairly positive, petal length is positively high and is moderately high for petal   width
+- Sepal Length has a small negative variance with Sepal width, high positive variance with Petal length and 
+  a moderately positive variance with Petal width.
+- Sepal width has a moderately negative variance with petal length and a small negative variance with petal width.
+- Petal length has a high positive variance with petal width.
+
+In this scenario, covariance values are the same as the variance values.
+
+
+```{r Variance and Covariance}
+
+#Calculating variance and covariance between numeric variables:
+
+iris_num_q1 <- iris_no_outliers_q1[,-c(1,2)]
+
+var(iris_num_q1)
+
+cov(iris_num_q1)
+
+```
+
+
+# Correlation:
+
+Based on all the three correlation models, Petal length and petal width have the highest correlation.
+
+
+```{r correlation}
+
+cor(iris_num_q1, use="pairwise.complete.obs", method = "pearson")
+
+cor(iris_num_q1, use="pairwise.complete.obs", method = "spearman")
+
+cor(iris_num_q1, use="pairwise.complete.obs", method = "kendall")
+
+```
+
+# Correlation Test:
+
+
+This correlation test states that the correlation between the petal's length and width is very high at 0.97, has p < 0.001 stating high significance and also has 95% CI[0.96, 0.97]
+
+
+
+```{r correlation test}
+
+cor.test(iris_num_q1$Petal.Length,iris_num_q1$Petal.Width, method = "pearson")
+
+
+```
+
+
+
+
+

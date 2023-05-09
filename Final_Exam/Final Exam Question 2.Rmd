@@ -1,0 +1,278 @@
+---
+title: "Final Exam - Question 2"
+author: "Karmanya Pathak"
+date: "4/25/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+(1) Linear Regression Analysis:
+
+Capture a  Regression Model with Only Significant Variables.  Set the dependent variable to 'Species'. Even though the variable is categorical and regression is not the proper model to use we will ignore this fact for the purpose of the assignment.
+
+Capture the final model summary. Provide any visuals that help interpret the results. 
+
+Provide an interpretation of the results in your own words.  Support your response with results captured from the linear regression analysis.
+
+```{r iris}
+
+iris_data <- read.csv("D:/Harrisburg/Lectures/Spring 2020/ANLY 500 - Principles of Analytics I/Final Exam/Question 2/iris_exams.csv")
+
+#Using a copy of the dataset in case we need to access the original data
+
+iris_q2 <- iris_data
+
+summary(iris_q2)
+  
+
+```
+
+
+```{r library}
+
+#Loading all the libraries
+
+library(MOTE)
+library(reshape)
+library(pwr)
+library(ggplot2)
+library(corrplot)
+library(moments)
+library(biotools)
+
+
+#Use the template for the plots
+
+cleanup = theme(panel.grid.major = element_blank(), 
+                panel.grid.minor = element_blank(), 
+                panel.background = element_blank(), 
+                axis.line.x = element_line(color = "black"),
+                axis.line.y = element_line(color = "black"),
+                legend.key = element_rect(fill = "white"),
+                text = element_text(size = 15))
+  
+
+
+
+```
+
+
+
+## Data Screening:
+
+## Accuracy, Missing Data:
+
+The data is clean and no missing data (NAs).
+
+Since there are no missing values, there is no need to omit any observations.
+
+```{r Data Screening}
+
+#Accuracy, missing data
+
+summary(iris_q2)
+
+
+```
+
+
+## Outliers:
+
+The cut off score for the mahalanobis measure is 18.46683
+
+There were 2 outliers in the dataset
+
+
+```{r Outliers}
+
+# Since we can calculatate means of variables using mahalanobis(in general as well) on only numeric variables, 
+# we would be ignoring factor variables id and Species
+
+mahal = mahalanobis(iris_q2[,-c(1,2)], colMeans(iris_q2[,-c(1,2)]), cov(iris_q2[,-c(1,2)]))
+
+#Calculating the cutoff score
+
+cutoff = qchisq(0.999,ncol(iris_q2[,-c(1,2)]))
+
+
+#Printing the cutoff score
+
+cutoff
+
+#Checking to see number of outliers in iris
+
+summary(mahal > cutoff)
+
+#Creating a new dataframe without the 2 outliers
+
+iris_no_outliers_q2 <- subset(iris_q2, mahal < cutoff)
+
+#Checking the new dataframe without the outliers
+
+str(iris_no_outliers_q2)
+
+summary(iris_no_outliers_q2)
+
+
+```
+
+
+
+## Assumptions:
+
+## Additivity:
+
+The model meets the assumption for additivity, and we have multicollinearity.
+
+```{r }
+
+corrplot(cor(iris_no_outliers_q2[,-c(1,2)]))
+
+cor(iris_no_outliers_q2[,-c(1,2)])
+
+
+```
+
+
+## Linearity: 
+
+I think the model meets the assumption for linearity.
+
+We are deviating from linearity, but there are not enough points to dismiss or violate linearity.
+
+```{r linearity}
+
+#We are removing one factor variable id to run a linear model
+
+iris_no_id_q2 <- iris_q2[,-1]
+
+
+random <- rchisq(nrow(iris_no_id_q2),4)
+fake <- lm(random~., data = iris_no_id_q2)
+#summary(fake)
+standardized <- rstudent(fake)
+fitted <- scale(fake$fitted.values)
+
+#Generating the linearity graph
+
+{qqnorm(standardized)
+abline(0,1)}
+
+
+
+
+```
+
+
+
+## Normality: 
+
+
+Although we have a slight skew in the data, it is not enough to violate normality.
+
+
+```{r normality}
+
+
+hist(standardized, breaks=15)
+
+
+```
+
+
+## Homogeneity/Homoscedasticity: 
+
+# Homogeneity:
+
+Using Box's M test, we find that p < 0.001, stating that we haven't met the assumption for Homogeneity.
+
+
+#Homoscedasticity:
+
+Apart from a few observations, the scatter is fairly equal from the lowest point to the largest point, letting us accept the assumption for homoscedasticity.
+
+
+
+
+```{r homog-s}
+
+#Plotting the values:
+
+plot(fitted, standardized) 
+abline(0,0)
+abline(v = 0)
+
+
+#Using Box's test to check for Homogeneity
+
+boxM(iris_no_id_q2[,-1], iris_no_id_q2[,1])
+
+
+```
+
+# Data Screening and Model 1:
+
+model1 below shows that we cannot create a linear regression model with factor variables. 
+We shall go on to convert the factors into character first and then into numeric for further regression modeling.
+
+
+```{r Data Screening, model1}
+
+str(iris_no_outliers_q2)
+
+
+model1 = lm(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width, data = iris_no_outliers_q2)
+
+
+```
+
+#Data proccessing:
+
+Converting dependent variable from factor to string to numeric.
+
+```{r Data processing}
+
+iris_factor_to_num <- iris_no_outliers_q2
+
+iris_factor_to_num$Species <- as.character(iris_factor_to_num$Species)
+
+iris_factor_to_num$Species[iris_factor_to_num$Species == "setosa"] <- "1"
+iris_factor_to_num$Species[iris_factor_to_num$Species == "versicolor"] <- "2"
+iris_factor_to_num$Species[iris_factor_to_num$Species == "virginica"] <- "3"
+
+iris_factor_to_num$Species <- as.numeric(iris_factor_to_num$Species)
+
+summary(iris_factor_to_num)
+
+```
+
+
+#Model 2:
+
+From the second model (model2), we realized that Sepal.width is not a significant variable to predict the dependent variable.
+
+```{r model2}
+
+model2 = lm(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width, data = iris_factor_to_num)
+
+summary(model2)
+```
+
+
+#Model 3:
+
+After model2 interpretation, we created model3 using only the significating variables (without Sepal.width).
+
+model3 had a high Adjusted R-squared of 0.9406 which is one of the indicators implying a significant model.
+
+Also, the correlation between the independent variables shows us that Sepal.Length has a very high negative correlation on Species(-0.96) telling us that every unit decrease in Sepal.Length increases the chances of the Species being Virginica and vice versa.
+
+
+```{r removing insignificant variable based on signif. code}
+model3 = lm(Species ~ Sepal.Length + Petal.Length + Petal.Width, data = iris_factor_to_num)
+
+summary(model3, correlation = TRUE)
+```

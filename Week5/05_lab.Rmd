@@ -1,0 +1,154 @@
+---
+title: "Statistical Modeling and Graphing"
+author: "Karmanya Pathak"
+date: '`r Sys.Date()`'
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*Citation*: Trends in Internet-based business-to-business marketing
+
+*Abstract*: The Internet is changing the transactional paradigms under which businesses-to-business marketers operate. Business-to-business marketers that take advantage of the operational efficiencies and effectiveness that emerge from utilizing the Internet in transactions are out performing firms that utilize traditional transactional processes. As an example, Dell computers, by utilizing business-to-business processes that take advantage of the Internet, has gained the largest market share in the PC business when compared to traditional manufacturers such as Compaq. This paper first examines the genesis of the Internet movement in business-to-business markets. The long-term impact of the increase of business-to-business utilization of the Internet on the marketing theory and marketing process is then discussed. Finally, managerial implications and directions for future research are highlighted.
+
+Dataset includes:
+
+    1)  Business marketing focus - traditional or forward thinking.
+    
+    2)	Internet use - low, medium, or high levels of business marketing use on the internet.
+    
+    3)	Time _ 1 - sales scores at the first measurement time.
+    
+    4)	Time _ 2 - sales scores at the second measurement time
+
+On all of these questions, be sure to include a coherent label for the X and Y axes.  You should change them to be "professional looking" (i.e. Proper Case, explain the variable listed, and could be printed in a journal).  The following will be assessed:
+
+    1)	Is it readable?
+    
+    2)	Is X-axis labeled appropriately?
+    
+    3)	Is Y-axis labeled appropriately?
+    
+    4)	Is it the right graph?
+    
+    5) 	Do the labels in the legend look appropriate?
+    
+    6)	Are there error bars when appropriate?
+
+We won't grade for color of bars or background color, but you should consider that these things are usually printed in black/white - so be sure you know how to change those values as well as get rid of that grey background.
+
+Please note that each subpoint (i.e. a, b) indicates a different chart.
+
+```{r starting}
+df <- read.csv("C:\\Users\\Karmanya\\Desktop\\Harrisburg\\Lectures\\Spring 2020\\ANLY 500 - Principles of Analytics I\\Assignment 5\\05_data.csv")
+#install.packages("ggplot2")
+library("ggplot2")
+cleanup = theme(panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 axis.line.x = element_line(color = 'black'),
+                 axis.line.y = element_line(color = 'black'),
+                 legend.key = element_rect(fill = 'white'),
+                 text = element_text(size = 15))
+```
+
+
+1)	Make a simple histogram using ggplot:
+
+    a.	Sales at time 1
+
+```{r hist1}
+qplot(df$time.1, geom="histogram", binwidth = 0.2, xlab = "Sales at time 1", ylab = "No. of sales (id)", main = "Sales scores at the first measurement time" )
+```
+
+    b.	Sales at time 2
+
+```{r hist2}
+qplot(df$time.2, geom="histogram", binwidth = 0.2, xlab = "Sales at time 2", ylab = "No. of sales (id)", main = "Sales scores at the second measurement time" )
+```
+
+2)	Make a bar chart with two independent variables:
+
+    a.	Business focus, internet, DV: sales at time 2
+
+```{r bar1}
+library("devtools")
+
+#?ggplot2.barplot()
+ggplot(df, aes(x = df$biz_focus, y = df$time.2, fill = df$internet)) +
+  geom_col(position = "dodge") +
+  xlab("Business Marketing Focus") +
+  ylab("Sales at Time 2") + labs(fill = "Internet")+
+  ggtitle("Bar Chart of Business Focus, internet and Sales at time 2")
+
+```
+
+3)	Make a bar chart with two independent variables: 
+
+    a.	Time (time 1, time 2), Business focus, DV: is sales from time 1 and 2
+
+```{r bar2}
+library(reshape2)
+df_melt = melt(data = df, id.vars = c("id","biz_focus"), measure.vars = c("time.1","time.2"))
+library("devtools")
+
+#?ggplot2.barplot()
+ggplot(df_melt, aes(x = df_melt$biz_focus, y = df_melt$value, fill = df_melt$variable)) +
+  geom_col(position = "dodge")+
+  xlab("Business Marketing Focus") +
+  ylab("Sales from Time 1 and 2") + labs(fill = "Time (Time 1, Time 2)")+
+  ggtitle("Bar Chart of Sales at time 1-time 2 and business focus")
+
+```
+
+4)	Make a simple line graph:
+
+    a.	Time (time 1, time 2), DV: is sales from time 1 and 2 
+
+```{r line}
+p <- ggplot(data=df_melt, aes(x=id, y=value, group=variable, col = variable)) +
+    geom_line()+
+  xlab("ID") +
+  ylab("Sales from Time 1 and 2") + labs(fill = "Time (Time 1, Time 2)")+
+  ggtitle("Simple Line Graph of Sales at time 1 and time 2")
+
+p
+
+```
+
+5)	Make a simple scatterplot:
+    
+    a.	Sales at Time 1, Time 2
+
+```{r scatter1}
+scatter1 = ggplot(df, aes(time.1, time.2))
+
+scatter1 + geom_point() + cleanup + xlab('Sales at time 1') + ylab('Sales at time 2')+
+  ggtitle("Simple Scatterplot of Sales at time 1 and time 2")
+```
+
+6)	Make a grouped scatterplot:
+
+    a.	Sales at time 1 and 2, Business focus
+
+```{r scatter2}
+scatter2 = ggplot(df, aes(time.1, time.2))
+
+scatter2 + geom_point(aes(colour = df$biz_focus))+   geom_smooth(method = 'lm', color = 'black') +
+  xlab('Sales at 1st time measurement')+
+  ylab('Frequency')+
+  cleanup +
+   scale_fill_manual(name = 'Business Focus',
+                    labels = c('Forward','Traditional'),
+                    values = c('black', 'grey'))+
+  scale_color_manual(name = 'Business Focus',
+                     labels = c('Forward','Traditional'),
+                     values = c('black', 'green')) +
+  ggtitle("Grouped Plot of Sales at time 1-time 2 and business focus")
+
+```
+

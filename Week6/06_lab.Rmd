@@ -1,0 +1,219 @@
+---
+title: "Data Screening"
+author: "Karmanya Pathak"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Dataset:
+
+600 employees participated in a company-wide experiment to test if an educational program would be effective at increasing employee satisfaction. Half of the employees were assigned to be in the control group, while the other half were assigned to be in the experimental group. The experimental group was the only group that received the educational intervention. All groups were given an employee satisfaction scale at time one to measure their initial levels of satisfaction. The same scale was then used half way through the program and at the end of the program. The goal of the experiment was to assess satisfaction to see if it increased across the measurements during the program as compared to a control group. 
+
+## Variables: 
+
+    a) Gender (1 = male, 2 = female)
+    b) Group (1 = control group, 2 = experimental group)
+    c) 3 satisfaction scores, ranging from 2-100 points. Decimals are possible! The control group was measured at the same three time points, but did not take part in the educational program. 
+        i) Before the program
+        ii)	Half way through the program 
+        iii) After the program 
+
+```{r starting}
+df <- read.csv("D:\\Harrisburg\\Lectures\\Spring 2020\\ANLY 500 - Principles of Analytics I\\Assignment 6\\06_data.csv")
+df
+```
+
+# Data screening:
+
+## Accuracy:
+
+    a)	Include output and indicate how the data are not accurate.
+    b)	Include output to show how you fixed the accuracy errors, and describe what you did.
+    
+```{r accuracy}
+df1 <- df
+
+#Checking for errors or typos
+table(df1$Gender)
+table(df1$Group)
+
+df1$Gender = factor(df1$Gender, 
+                     levels = c(1,2), 
+                     labels = c("Male", "Female"))
+
+df1$Group = factor(df1$Group, 
+                     levels = c(1,2), 
+                     labels = c("Control Group", "Experimental Group"))
+
+summary(df1)
+
+```
+
+I labelled the levels 1 and 2 in Gender as Male and Female and levels 1 and 2 in Group as Control Group and Experimental Group respectively.
+
+## Missing data:
+
+    a)	Include output that shows you have missing data.
+    b)	Include output and a description that shows what you did with the missing data.
+        i)	Replace all participant data if they have less than or equal to 20% of missing data by row. 
+        ii)	You can leave out the other participants (i.e. you do not have to create allrows). 
+        
+```{r missing}
+summary(df)
+
+apply(df,2,function(x) sum(is.na(x)))
+percentmiss = function(x){sum(is.na(x))/length(x)*100}
+apply(df,1,percentmiss)
+
+missing = apply(df,1,percentmiss)
+table(missing)
+
+replace = subset(df, missing <= 20)
+missing1 = apply(replace,1,percentmiss)
+table(missing1)
+
+dont = subset(df, missing > 20)
+missing2 = apply(dont,1,percentmiss)
+table(missing2)
+
+apply(df,2,percentmiss)
+
+replace_col = replace[,-c(1,3)]
+dont_col = replace[,c(1,3)]
+
+#install.packages('mice')
+library('mice')
+
+temp_no_miss = mice(replace_col)
+
+no_miss = complete(temp_no_miss,1)
+summary(no_miss)
+
+all_col = cbind(dont_col, no_miss)
+summary(all_col)
+
+# 1.75% of the gender data is missing. This can be included in the category which makes the highest part of the data, i.e. female.
+
+all_col$Gender[is.na(all_col$Gender)] = 2
+
+summary(all_col)
+
+
+```
+
+## Outliers:
+
+    a)	Include a summary of your mahal scores that are greater than the cutoff.
+    b)	What are the df for your Mahalanobis cutoff?
+    c)	What is the cut off score for your Mahalanobis measure?
+    d)	How many outliers did you have?
+    e)	Delete all outliers. 
+    
+```{r outliers}
+str(df)
+mahal = mahalanobis(df,
+                    colMeans(df, na.rm=TRUE),
+                    cov(df, use ="pairwise.complete.obs")
+                    )
+mahal
+
+cutoff = qchisq(1-.001,ncol(df))
+print(cutoff)
+
+summary(mahal < cutoff)
+
+noout = subset(df, mahal < cutoff)
+str(noout)
+```
+
+# Assumptions:
+
+## Additivity: 
+
+    a)  Include the symnum bivariate correlation table of your continuous measures.
+    b)  Do you meet the assumption for additivity?
+    
+```{r additivity}
+#Additivity 
+cor(all_col)
+library(corrplot)
+corrplot(cor(all_col))
+
+symnum(cor(all_col))
+
+#yes, it meets the assumption of additivity to some extent with a stronger positive relationship between Group and After.
+
+```
+
+## Linearity: 
+
+    a)  Include a picture that shows how you might assess multivariate linearity.
+    b)  Do you think you've met the assumption for linearity?
+    
+```{r linearity}
+#Linearity
+random = rchisq(nrow(all_col), 400)
+fake = lm(random~., data = all_col)
+summary(fake)
+standardized = rstudent(fake)
+qqnorm(standardized)
+abline(0,1)
+
+#yes I think we've met the assumption for linearity.
+
+```
+
+## Normality: 
+
+    a)  Include a picture that shows how you might assess multivariate normality.
+    b)  Do you think you've met the assumption for normality? 
+
+```{r normality}
+library(moments)
+#Normality
+skewness(all_col,na.rm = TRUE)
+
+kurtosis(all_col,na.rm = TRUE)
+
+hist(standardized, breaks = 20)
+
+#yes, it is very close to being a normal distribution and I have met the assumption of normality.
+
+```
+
+## Homogeneity/Homoscedasticity: 
+
+    a)  Include a picture that shows how you might assess multivariate homogeneity.
+    b)  Do you think you've met the assumption for homogeneity?
+    c)  Do you think you've met the assumption for homoscedasticity?
+
+```{r homog-s}
+#Homogeneity, Homoscedasticity
+
+#Making the fit values standardized
+fitvalues = scale(fake$fitted.values)
+
+#Plot the values
+plot(fitvalues, standardized) 
+abline(0,0)
+abline(v = 0)
+
+# Alternative diagram
+
+plot(fake,1)
+
+#Homogeneity - 
+
+#The difference in the spread above and below the line is 1 and we meet the assumption of Homogeneity to some extent.
+
+#The difference in the spread across the x axis is very close to even with a slight heavier distribution towards the left side as compared to the right side given us the assumption of Homoscedasticity to some extent.
+
+
+
+```

@@ -1,0 +1,1084 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Correlation},
+  pdfauthor={Karmanya Pathak},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{Correlation}
+\author{Karmanya Pathak}
+\date{2020-03-29}
+
+\begin{document}
+\maketitle
+
+\emph{Title}: Big Data Analytics Services for Enhancing Business
+Intelligence
+
+\emph{Abstract}: This article examines how to use big data analytics
+services to enhance business intelligence (BI). More specifically, this
+article proposes an ontology of big data analytics and presents a big
+data analytics service-oriented architecture (BASOA), and then applies
+BASOA to BI, where our surveyed data analysis shows that the proposed
+BASOA is viable for enhancing BI and enterprise information systems.
+This article also explores temporality, expectability, and relativity as
+the characteristics of intelligence in BI. These characteristics are
+what customers and decision makers expect from BI in terms of systems,
+products, and services of organizations. The proposed approach in this
+article might facilitate the research and development of business
+analytics, big data analytics, and BI as well as big data science and
+big data computing.
+
+\hypertarget{dataset}{%
+\section{Dataset:}\label{dataset}}
+
+\begin{verbatim}
+-   Gender of the participant surveyed on these topics
+-   Temporality: an average score of the rated ability to adapt to change over time 1 (not changing) to 7 (changing a lot)
+-   Expectability: a rated degree of satisfaction with the BI
+-   Relativity: average score rating of how much better one system is than another in BI 1 (not very good) to 7 (very good)
+-   Positive emotion: how positive participants felt about BI (higher scores are more positive, ranges from 1 to 7).
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df1 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"D:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Harrisburg}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Lectures}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Spring 2020}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{ANLY 500 - Principles of Analytics I}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Assignment 7}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{07_data.csv"}\NormalTok{)}
+
+\NormalTok{df2 <-}\StringTok{ }\NormalTok{df1}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{data-screening}{%
+\section{Data Screening:}\label{data-screening}}
+
+\hypertarget{accuracy}{%
+\subsection{Accuracy:}\label{accuracy}}
+
+\begin{verbatim}
+a.  Include output that indicates if the data are or are not accurate.
+b.  If the data are not accurate, delete the inaccurate scores.
+c.  Include a summary that shows that you fixed the inaccurate scores.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(df2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    300 obs. of  5 variables:
+##  $ gender       : Factor w/ 2 levels "men","women": 2 2 2 2 2 2 2 2 2 2 ...
+##  $ temporality  : num  4.7 4.22 4.59 4.33 4.26 ...
+##  $ expectability: int  6 5 3 1 2 5 5 0 5 6 ...
+##  $ relativity   : num  0.591 4.399 2.573 1.347 2.447 ...
+##  $ positive     : num  3.698 -0.226 1.224 1.795 2.202 ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(df2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    gender     temporality    expectability     relativity        positive      
+##  men  :150   Min.   :1.737   Min.   :0.000   Min.   :-2.301   Min.   :-0.9128  
+##  women:150   1st Qu.:2.823   1st Qu.:2.000   1st Qu.: 2.439   1st Qu.: 2.0175  
+##              Median :3.581   Median :3.000   Median : 3.564   Median : 3.0780  
+##              Mean   :3.532   Mean   :3.643   Mean   : 3.569   Mean   : 3.1446  
+##              3rd Qu.:4.225   3rd Qu.:5.000   3rd Qu.: 4.731   3rd Qu.: 4.2614  
+##              Max.   :5.184   Max.   :9.000   Max.   :10.508   Max.   : 8.2126  
+##              NA's   :9       NA's   :9       NA's   :9        NA's   :9
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df2}\OperatorTok{$}\NormalTok{expectability[ df2}\OperatorTok{$}\NormalTok{expectability }\OperatorTok{<}\StringTok{ }\DecValTok{1}\NormalTok{ ] =}\StringTok{ }\OtherTok{NA}
+\NormalTok{df2}\OperatorTok{$}\NormalTok{expectability[ df2}\OperatorTok{$}\NormalTok{expectability }\OperatorTok{>}\StringTok{ }\DecValTok{7}\NormalTok{ ] =}\StringTok{ }\OtherTok{NA}
+
+\CommentTok{#table(df$relativity)}
+
+\NormalTok{df2}\OperatorTok{$}\NormalTok{relativity[ df2}\OperatorTok{$}\NormalTok{relativity }\OperatorTok{<}\StringTok{ }\DecValTok{1}\NormalTok{ ] =}\StringTok{ }\OtherTok{NA}
+\NormalTok{df2}\OperatorTok{$}\NormalTok{relativity[ df2}\OperatorTok{$}\NormalTok{relativity }\OperatorTok{>}\StringTok{ }\DecValTok{7}\NormalTok{ ] =}\StringTok{ }\OtherTok{NA}
+
+\CommentTok{#table(df$relativity)}
+
+\NormalTok{df2}\OperatorTok{$}\NormalTok{positive[ df2}\OperatorTok{$}\NormalTok{positive }\OperatorTok{<}\StringTok{ }\DecValTok{1}\NormalTok{ ] =}\StringTok{ }\OtherTok{NA}
+\NormalTok{df2}\OperatorTok{$}\NormalTok{positive[ df2}\OperatorTok{$}\NormalTok{positive }\OperatorTok{>}\StringTok{ }\DecValTok{7}\NormalTok{ ] =}\StringTok{ }\OtherTok{NA}
+\CommentTok{#table(df$positive)}
+\KeywordTok{summary}\NormalTok{(df2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    gender     temporality    expectability     relativity       positive    
+##  men  :150   Min.   :1.737   Min.   :1.000   Min.   :1.065   Min.   :1.053  
+##  women:150   1st Qu.:2.823   1st Qu.:2.000   1st Qu.:2.625   1st Qu.:2.337  
+##              Median :3.581   Median :3.000   Median :3.618   Median :3.250  
+##              Mean   :3.532   Mean   :3.633   Mean   :3.650   Mean   :3.423  
+##              3rd Qu.:4.225   3rd Qu.:5.000   3rd Qu.:4.676   3rd Qu.:4.396  
+##              Max.   :5.184   Max.   :7.000   Max.   :6.952   Max.   :6.918  
+##              NA's   :9       NA's   :22      NA's   :44      NA's   :41
+\end{verbatim}
+
+\hypertarget{missing}{%
+\subsection{Missing:}\label{missing}}
+
+\begin{verbatim}
+a.  Since any accuracy errors will create more than 5% missing data, exclude all data pairwise for the rest of the analyses. 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{no_miss <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(df2, }\KeywordTok{is.na}\NormalTok{(df2}\OperatorTok{$}\NormalTok{temporality)}\OperatorTok{==}\OtherTok{FALSE} \OperatorTok{&}\StringTok{ }\KeywordTok{is.na}\NormalTok{(df2}\OperatorTok{$}\NormalTok{expectability)}\OperatorTok{==}\OtherTok{FALSE} \OperatorTok{&}\StringTok{ }\KeywordTok{is.na}\NormalTok{(df2}\OperatorTok{$}\NormalTok{relativity)}\OperatorTok{==}\OtherTok{FALSE} \OperatorTok{&}\StringTok{ }\KeywordTok{is.na}\NormalTok{(df2}\OperatorTok{$}\NormalTok{positive)}\OperatorTok{==}\OtherTok{FALSE}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(no_miss)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    gender     temporality    expectability     relativity       positive    
+##  men  :106   Min.   :1.737   Min.   :1.000   Min.   :1.065   Min.   :1.053  
+##  women: 93   1st Qu.:2.849   1st Qu.:3.000   1st Qu.:2.634   1st Qu.:2.311  
+##              Median :3.508   Median :3.000   Median :3.567   Median :3.232  
+##              Mean   :3.491   Mean   :3.593   Mean   :3.636   Mean   :3.417  
+##              3rd Qu.:4.164   3rd Qu.:5.000   3rd Qu.:4.684   3rd Qu.:4.400  
+##              Max.   :5.102   Max.   :7.000   Max.   :6.891   Max.   :6.918
+\end{verbatim}
+
+\hypertarget{outliers}{%
+\subsection{Outliers:}\label{outliers}}
+
+\begin{verbatim}
+a.  Include a summary of your mahal scores.
+b.  What are the df for your Mahalanobis cutoff?
+c.  What is the cut off score for your Mahalanobis measure?
+d.  How many outliers did you have? 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#a.}
+\KeywordTok{str}\NormalTok{(no_miss)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    199 obs. of  5 variables:
+##  $ gender       : Factor w/ 2 levels "men","women": 2 2 2 2 2 2 2 2 2 2 ...
+##  $ temporality  : num  4.59 4.33 4.26 4.66 4.04 ...
+##  $ expectability: int  3 1 2 5 5 5 6 5 7 5 ...
+##  $ relativity   : num  2.57 1.35 2.45 3.78 5.45 ...
+##  $ positive     : num  1.22 1.8 2.2 2.55 3.02 ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{no_miss}\OperatorTok{$}\NormalTok{gender <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{gender)}
+\NormalTok{mahal =}\StringTok{ }\KeywordTok{mahalanobis}\NormalTok{(no_miss,}
+                    \KeywordTok{colMeans}\NormalTok{(no_miss, }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{),}
+                    \KeywordTok{cov}\NormalTok{(no_miss, }\DataTypeTok{use =}\StringTok{"pairwise.complete.obs"}\NormalTok{)}
+\NormalTok{                    )}
+\NormalTok{mahal}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         3         4         5         6         7         9        12        16 
+##  5.173705  8.705403  4.113660  3.195317  2.760031  9.694104  4.796637  8.232600 
+##        17        19        20        22        24        28        29        30 
+##  6.989345  3.123559  3.713654 12.180095  8.777336  3.123600  4.592998  5.129798 
+##        31        32        34        37        38        39        42        43 
+##  8.870841  3.218623  7.902896  2.955135  3.175031  8.785114  7.548496  7.587460 
+##        44        45        46        49        50        52        53        55 
+##  3.884792  4.438407  4.050991  2.762530  4.094642  4.971903  3.535604  3.694822 
+##        56        59        60        62        63        64        65        67 
+##  2.072417  3.639987  9.192360  9.383698  1.814481  3.223031  4.204170  2.437363 
+##        68        69        70        71        73        74        75        76 
+##  3.573854 11.687956  3.116934  7.094872  6.959299  4.261758  1.670075  4.602651 
+##        77        78        81        82        83        85        86        88 
+##  3.771035  9.151379  4.267840  7.164489  8.442925  4.444914  2.463844  9.509837 
+##        90        97        98       100       101       102       104       105 
+##  5.749490  3.188488  5.167400  5.352611  3.784736  2.783307  6.221035  6.273785 
+##       106       107       108       110       112       113       114       116 
+##  6.614528  3.371546  5.143446  9.216289  4.164509  5.375734  4.951599  3.781767 
+##       119       121       122       124       126       127       129       130 
+##  6.563688  5.335984  7.041592  7.436183  7.248670  6.349478  2.761290  5.622344 
+##       131       132       133       135       137       139       142       143 
+##  6.402980  3.225894  4.998631  4.349487  5.842897  6.499433  6.609823  1.873188 
+##       144       146       148       149       150       151       152       153 
+##  2.374542  2.747883  2.837559  5.909568  3.939083  6.550338  1.416239  6.764271 
+##       154       155       157       158       159       160       162       163 
+##  1.744653 14.145021  7.292288  1.510605  8.911743  3.893296  3.371522  3.652287 
+##       164       166       171       172       173       174       175       178 
+##  5.119587  1.832034  4.450481  3.014248  5.248819  2.445432  5.331486  3.523170 
+##       179       180       181       182       183       184       187       188 
+##  6.203487  4.262792  2.931815  3.816309  6.978477  9.494469  7.282103  2.291328 
+##       190       191       194       195       196       198       199       201 
+##  9.209333  7.782472  2.958115  4.092585  5.964329  4.207668  4.995629  3.815049 
+##       202       203       204       206       207       208       209       210 
+##  7.930977  3.074316  7.849840  5.092080  1.318739  2.808612  6.541754  2.804183 
+##       212       213       216       217       218       220       221       222 
+##  5.718393  3.525487  1.259470  5.655145  3.041396  3.497104  7.154859 13.402188 
+##       223       224       225       226       227       229       230       231 
+##  5.621879  4.031839  2.232967  2.163585  5.652425  3.832274  5.036014  1.264779 
+##       232       233       234       235       236       239       240       241 
+##  3.790919  1.507569  2.905366  4.196152  5.473969  3.983441  3.905880  4.477096 
+##       244       246       248       249       250       251       252       255 
+##  3.836541  4.861460  2.904178  6.616769  6.027505  7.875058  3.685401  3.872168 
+##       256       257       258       259       260       261       262       263 
+##  6.451456  1.799545  5.121325  2.587768  6.479328  3.878655  2.595982  3.789359 
+##       265       268       269       270       271       274       275       276 
+##  2.637599  4.529783  4.139586  3.687803  3.382491  4.597964  5.062751  5.028404 
+##       278       279       280       282       283       286       287       288 
+##  8.154345  2.901044  6.454348  1.890022  3.076607 12.823742  6.058405  7.717686 
+##       289       290       292       294       295       296       298 
+##  3.303212  2.033539  4.775521  2.459799  5.453165  6.775175  2.379570
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#b.}
+\CommentTok{#199 observations, so degrees of freedom is 198}
+
+
+\CommentTok{#c.}
+\NormalTok{cutoff =}\StringTok{ }\KeywordTok{qchisq}\NormalTok{(}\DecValTok{1}\FloatTok{-.001}\NormalTok{,}\KeywordTok{ncol}\NormalTok{(no_miss))}
+\KeywordTok{print}\NormalTok{(cutoff)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 20.51501
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"Cutoff is 20.51501"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Cutoff is 20.51501"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#d.}
+\KeywordTok{summary}\NormalTok{(mahal }\OperatorTok{<}\StringTok{ }\NormalTok{cutoff)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Mode    TRUE 
+## logical     199
+\end{verbatim}
+
+\hypertarget{assumptions}{%
+\section{Assumptions:}\label{assumptions}}
+
+\hypertarget{linearity}{%
+\subsection{Linearity:}\label{linearity}}
+
+\begin{verbatim}
+a.  Include a picture that shows how you might assess multivariate linearity.
+b.  Do you think you've met the assumption for linearity? 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{random =}\StringTok{ }\KeywordTok{rchisq}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(no_miss), }\DecValTok{198}\NormalTok{)}
+\NormalTok{fake =}\StringTok{ }\KeywordTok{lm}\NormalTok{(random}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ no_miss)}
+\KeywordTok{summary}\NormalTok{(fake)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = random ~ ., data = no_miss)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -50.572 -13.753  -2.285  13.395  55.139 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   202.8651     9.1811  22.096   <2e-16 ***
+## gender         10.8668     5.0691   2.144   0.0333 *  
+## temporality    -6.6689     3.2866  -2.029   0.0438 *  
+## expectability   2.3078     1.0463   2.206   0.0286 *  
+## relativity     -1.4950     1.1281  -1.325   0.1867    
+## positive        0.2511     1.0998   0.228   0.8196    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 19.96 on 193 degrees of freedom
+## Multiple R-squared:  0.04973,    Adjusted R-squared:  0.02511 
+## F-statistic:  2.02 on 5 and 193 DF,  p-value: 0.0775
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{standardized =}\StringTok{ }\KeywordTok{rstudent}\NormalTok{(fake)}
+\KeywordTok{qqnorm}\NormalTok{(standardized)}
+\KeywordTok{abline}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{07_lab-1_files/figure-latex/linearity-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#yes I think we've met the assumption for linearity, because the q-q plot follows along the abline with few outlines at both ends of the tail.}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{normality}{%
+\subsection{Normality:}\label{normality}}
+
+\begin{verbatim}
+a.  Include a picture that shows how you might assess multivariate normality.
+b.  Do you think you've met the assumption for normality? 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(moments)}
+\CommentTok{#Normality}
+\KeywordTok{skewness}\NormalTok{(no_miss)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        gender   temporality expectability    relativity      positive 
+##  0.1309329477 -0.0006409599  0.2893538674  0.0962008323  0.4066039422
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{kurtosis}\NormalTok{(no_miss)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        gender   temporality expectability    relativity      positive 
+##      1.017143      2.026042      2.359912      2.360471      2.329268
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{hist}\NormalTok{(standardized, }\DataTypeTok{breaks =} \DecValTok{20}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{07_lab-1_files/figure-latex/normality-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#this is not completely normal, slightly skewed}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{homogeneity-and-homoscedasticity}{%
+\subsection{Homogeneity and
+Homoscedasticity:}\label{homogeneity-and-homoscedasticity}}
+
+\begin{verbatim}
+a.  Include a picture that shows how you might assess multivariate homogeneity.
+b.  Do you think you've met the assumption for homogeneity?
+c.  Do you think you've met the assumption for homoscedasticity?
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Homogeneity, Homoscedasticity}
+
+\CommentTok{#Making the fit values standardized}
+\NormalTok{fitvalues =}\StringTok{ }\KeywordTok{scale}\NormalTok{(fake}\OperatorTok{$}\NormalTok{fitted.values)}
+
+\CommentTok{#Plot the values}
+\KeywordTok{plot}\NormalTok{(fitvalues, standardized) }
+\KeywordTok{abline}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v =} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{07_lab-1_files/figure-latex/homogs-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Alternative diagram}
+
+\KeywordTok{plot}\NormalTok{(fake,}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{07_lab-1_files/figure-latex/homogs-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Homogeneity - }
+
+\CommentTok{#The difference in the spread above and below the line is 1 and we meet the assumption of Homogeneity to some extent.}
+
+\CommentTok{#The difference in the spread across the x axis is very close and even giving us the assumption of Homoscedasticity to a large extent.}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{hypothesis-testing-graphs}{%
+\section{Hypothesis Testing / Graphs:}\label{hypothesis-testing-graphs}}
+
+Create a scatter plot of temporality and relativity.
+
+\begin{verbatim}
+a.  Be sure to check x/y axis labels and length.
+b.  What type of relationship do these two variables appear to have?
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'ggplot2' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(no_miss, }\KeywordTok{aes}\NormalTok{(temporality, relativity)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlim}\NormalTok{(}\KeywordTok{min}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{temporality, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{), }\KeywordTok{max}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{temporality, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylim}\NormalTok{(}\KeywordTok{min}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{relativity, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{), }\KeywordTok{max}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{relativity, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Temporality"}\NormalTok{) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Relativity"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{07_lab-1_files/figure-latex/plot1-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#These two variables do not seem to have any relationship.}
+\end{Highlighting}
+\end{Shaded}
+
+Create a scatter plot of expectability and positive emotion.
+
+\begin{verbatim}
+a.  Include a linear line on the graph. 
+b.  Be sure to check x/y axis labels and length.
+c.  What type of relationship do these two variables appear to have?
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(no_miss, }\KeywordTok{aes}\NormalTok{(expectability, positive)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlim}\NormalTok{(}\KeywordTok{min}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{expectability, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{), }\KeywordTok{max}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{expectability, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylim}\NormalTok{(}\KeywordTok{min}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{positive, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{), }\KeywordTok{max}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{positive, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Expectability"}\NormalTok{) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Positive"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{07_lab-1_files/figure-latex/plot2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Thse two variables Expectability and Positive emotion do not appear to have any kind of relationship.}
+\end{Highlighting}
+\end{Shaded}
+
+Create a scatter plot of expectability and relativity, grouping by
+gender.
+
+\begin{verbatim}
+a.  Include a linear line on the graph. 
+b.  Be sure to check x/y axis labels and length.
+c.  What type of relationship do these two variables appear to have for each group?
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(no_miss, }\KeywordTok{aes}\NormalTok{(expectability, relativity)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method =}\NormalTok{ lm, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill =}\NormalTok{ gender)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlim}\NormalTok{(}\KeywordTok{min}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{expectability, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{), }\KeywordTok{max}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{expectability, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylim}\NormalTok{(}\KeywordTok{min}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{relativity, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{), }\KeywordTok{max}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{relativity, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Expectability"}\NormalTok{) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Relativity"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula 'y ~ x'
+\end{verbatim}
+
+\includegraphics{07_lab-1_files/figure-latex/plot3-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Expectability and Relativity do not seem to have any relationship to the gender.}
+\end{Highlighting}
+\end{Shaded}
+
+Include a correlation table of all of the variables (cor).
+
+\begin{verbatim}
+a.  Include the output for Pearson.
+b.  Include the output for Spearman.
+c.  Include the output for Kendall.
+d.  Which correlation was the strongest?
+e.  For the correlations with gender, would point biserial or biserial be more appropriate?  Why?
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#a.}
+
+\KeywordTok{cor}\NormalTok{(no_miss, }\DataTypeTok{use=}\StringTok{"pairwise.complete.obs"}\NormalTok{, }\DataTypeTok{method =} \StringTok{"pearson"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   gender temporality expectability  relativity    positive
+## gender         1.0000000   0.8211474    0.21596478  0.24314335 -0.28672829
+## temporality    0.8211474   1.0000000    0.22107341  0.20824422 -0.25348617
+## expectability  0.2159648   0.2210734    1.00000000  0.29778257 -0.01973344
+## relativity     0.2431433   0.2082442    0.29778257  1.00000000 -0.02019202
+## positive      -0.2867283  -0.2534862   -0.01973344 -0.02019202  1.00000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#b.}
+
+\KeywordTok{cor}\NormalTok{(no_miss, }\DataTypeTok{use=}\StringTok{"pairwise.complete.obs"}\NormalTok{, }\DataTypeTok{method =} \StringTok{"spearman"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   gender temporality expectability  relativity     positive
+## gender         1.0000000   0.8292964   0.194344772 0.245107045 -0.271406084
+## temporality    0.8292964   1.0000000   0.200975416 0.208455916 -0.252025278
+## expectability  0.1943448   0.2009754   1.000000000 0.298590513  0.004897362
+## relativity     0.2451070   0.2084559   0.298590513 1.000000000  0.005051013
+## positive      -0.2714061  -0.2520253   0.004897362 0.005051013  1.000000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#c.}
+
+\KeywordTok{cor}\NormalTok{(no_miss, }\DataTypeTok{use=}\StringTok{"pairwise.complete.obs"}\NormalTok{, }\DataTypeTok{method =} \StringTok{"kendall"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   gender temporality expectability   relativity     positive
+## gender         1.0000000   0.6788168   0.172909044  0.200631271 -0.222158232
+## temporality    0.6788168   1.0000000   0.157765176  0.139231511 -0.165321557
+## expectability  0.1729090   0.1577652   1.000000000  0.218075550  0.002423688
+## relativity     0.2006313   0.1392315   0.218075550  1.000000000 -0.004212984
+## positive      -0.2221582  -0.1653216   0.002423688 -0.004212984  1.000000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#d.}
+
+\StringTok{"Correlation between gender and temporality is the strongest with all the three correlation methods."}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Correlation between gender and temporality is the strongest with all the three correlation methods."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#e.}
+
+\StringTok{"Point biserial is correlation with a true dichotomy variable, having no underlying continuum. Gender fits this status and hence for correlations with gender, point biserial would be more appropriate."}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Point biserial is correlation with a true dichotomy variable, having no underlying continuum. Gender fits this status and hence for correlations with gender, point biserial would be more appropriate."
+\end{verbatim}
+
+Calculate confidence interval for temporality and relativity.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{with}\NormalTok{(no_miss, }\KeywordTok{cor.test}\NormalTok{(temporality, relativity))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  temporality and relativity
+## t = 2.9884, df = 197, p-value = 0.003162
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.07121707 0.33755692
+## sample estimates:
+##       cor 
+## 0.2082442
+\end{verbatim}
+
+Calculate the difference in correlations for 1) temporality and
+expectbility and 2) temporality and positive emotion.
+
+\begin{verbatim}
+a.  Include the output from the test through Pearson's test.
+b.  Is there a significant difference in their correlations?
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#a)}
+
+\KeywordTok{cor}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{temporality,no_miss}\OperatorTok{$}\NormalTok{expectability, }\DataTypeTok{use=}\StringTok{"pairwise.complete.obs"}\NormalTok{, }\DataTypeTok{method =} \StringTok{"pearson"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.2210734
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{cor}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{temporality,no_miss}\OperatorTok{$}\NormalTok{positive, }\DataTypeTok{use=}\StringTok{"pairwise.complete.obs"}\NormalTok{, }\DataTypeTok{method =} \StringTok{"pearson"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -0.2534862
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"cocor"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'cocor' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{cocor}\NormalTok{(}\OperatorTok{~}\NormalTok{temporality }\OperatorTok{+}\StringTok{ }\NormalTok{expectability }\OperatorTok{|}\StringTok{ }\NormalTok{temporality }\OperatorTok{+}\StringTok{ }\NormalTok{positive, }\DataTypeTok{data =}\NormalTok{ no_miss)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##   Results of a comparison of two overlapping correlations based on dependent groups
+## 
+## Comparison between r.jk (temporality, expectability) = 0.2211 and r.jh (temporality, positive) = -0.2535
+## Difference: r.jk - r.jh = 0.4746
+## Related correlation: r.kh = -0.0197
+## Data: no_miss: j = temporality, k = expectability, h = positive
+## Group size: n = 199
+## Null hypothesis: r.jk is equal to r.jh
+## Alternative hypothesis: r.jk is not equal to r.jh (two-sided)
+## Alpha: 0.05
+## 
+## pearson1898: Pearson and Filon's z (1898)
+##   z = 5.0382, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## hotelling1940: Hotelling's t (1940)
+##   t = 4.9340, df = 196, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## williams1959: Williams' t (1959)
+##   t = 4.9336, df = 196, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## olkin1967: Olkin's z (1967)
+##   z = 5.0382, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## dunn1969: Dunn and Clark's z (1969)
+##   z = 4.8104, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## hendrickson1970: Hendrickson, Stanley, and Hills' (1970) modification of Williams' t (1959)
+##   t = 4.9336, df = 196, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## steiger1980: Steiger's (1980) modification of Dunn and Clark's z (1969) using average correlations
+##   z = 4.7437, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## meng1992: Meng, Rosenthal, and Rubin's z (1992)
+##   z = 4.6799, p-value = 0.0000
+##   Null hypothesis rejected
+##   95% confidence interval for r.jk - r.jh: 0.2813 0.6866
+##   Null hypothesis rejected (Interval does not include 0)
+## 
+## hittner2003: Hittner, May, and Silver's (2003) modification of Dunn and Clark's z (1969) using a backtransformed average Fisher's (1921) Z procedure
+##   z = 4.7436, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## zou2007: Zou's (2007) confidence interval
+##   95% confidence interval for r.jk - r.jh: 0.2834 0.6535
+##   Null hypothesis rejected (Interval does not include 0)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#b)}
+
+\CommentTok{#The difference of 0.4746 signifies moderate difference in their correlation, but not significant.}
+\end{Highlighting}
+\end{Shaded}
+
+Calculate the difference in correlations for gender on temporality and
+relativity.
+
+\begin{verbatim}
+a.  Include the output from the test.
+b.  Is there a significant difference in their correlations?
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#a)}
+
+\KeywordTok{cor}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{gender, no_miss}\OperatorTok{$}\NormalTok{temporality, }\DataTypeTok{use=}\StringTok{"pairwise.complete.obs"}\NormalTok{, }\DataTypeTok{method =} \StringTok{"pearson"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.8211474
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{cor}\NormalTok{(no_miss}\OperatorTok{$}\NormalTok{gender, no_miss}\OperatorTok{$}\NormalTok{relativity, }\DataTypeTok{use=}\StringTok{"pairwise.complete.obs"}\NormalTok{, }\DataTypeTok{method =} \StringTok{"pearson"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.2431433
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{cocor}\NormalTok{(}\OperatorTok{~}\NormalTok{gender }\OperatorTok{+}\StringTok{ }\NormalTok{temporality }\OperatorTok{|}\StringTok{ }\NormalTok{gender }\OperatorTok{+}\StringTok{ }\NormalTok{relativity, }\DataTypeTok{data =}\NormalTok{ no_miss)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##   Results of a comparison of two overlapping correlations based on dependent groups
+## 
+## Comparison between r.jk (gender, temporality) = 0.8211 and r.jh (gender, relativity) = 0.2431
+## Difference: r.jk - r.jh = 0.578
+## Related correlation: r.kh = 0.2082
+## Data: no_miss: j = gender, k = temporality, h = relativity
+## Group size: n = 199
+## Null hypothesis: r.jk is equal to r.jh
+## Alternative hypothesis: r.jk is not equal to r.jh (two-sided)
+## Alpha: 0.05
+## 
+## pearson1898: Pearson and Filon's z (1898)
+##   z = 8.4784, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## hotelling1940: Hotelling's t (1940)
+##   t = 11.3628, df = 196, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## williams1959: Williams' t (1959)
+##   t = 10.2578, df = 196, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## olkin1967: Olkin's z (1967)
+##   z = 8.4784, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## dunn1969: Dunn and Clark's z (1969)
+##   z = 9.5639, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## hendrickson1970: Hendrickson, Stanley, and Hills' (1970) modification of Williams' t (1959)
+##   t = 11.3609, df = 196, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## steiger1980: Steiger's (1980) modification of Dunn and Clark's z (1969) using average correlations
+##   z = 9.3551, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## meng1992: Meng, Rosenthal, and Rubin's z (1992)
+##   z = 9.1993, p-value = 0.0000
+##   Null hypothesis rejected
+##   95% confidence interval for r.jk - r.jh: 0.7179 1.1066
+##   Null hypothesis rejected (Interval does not include 0)
+## 
+## hittner2003: Hittner, May, and Silver's (2003) modification of Dunn and Clark's z (1969) using a backtransformed average Fisher's (1921) Z procedure
+##   z = 9.1969, p-value = 0.0000
+##   Null hypothesis rejected
+## 
+## zou2007: Zou's (2007) confidence interval
+##   95% confidence interval for r.jk - r.jh: 0.4467 0.7151
+##   Null hypothesis rejected (Interval does not include 0)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#b)}
+
+\CommentTok{#The difference of 0.578 signifies moderate difference in their correlation, but not significant.}
+\end{Highlighting}
+\end{Shaded}
+
+Calculate the partial and semipartial correlations for all variables,
+and include the output. a. Are any of the correlations significant after
+controlling for all other relationships?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#install.packages("ppcor")}
+\KeywordTok{library}\NormalTok{(}\StringTok{"ppcor"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'ppcor' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: MASS
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pcor}\NormalTok{(no_miss, }\DataTypeTok{method =} \StringTok{"pearson"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $estimate
+##                    gender temporality expectability  relativity    positive
+## gender         1.00000000  0.79215963    0.03391939  0.12228249 -0.14913195
+## temporality    0.79215963  1.00000000    0.07829051 -0.00342090 -0.03650384
+## expectability  0.03391939  0.07829051    1.00000000  0.25667189  0.03519006
+## relativity     0.12228249 -0.00342090    0.25667189  1.00000000  0.04297327
+## positive      -0.14913195 -0.03650384    0.03519006  0.04297327  1.00000000
+## 
+## $p.value
+##                     gender  temporality expectability   relativity   positive
+## gender        0.000000e+00 1.797635e-43  0.6369482700 0.0877443604 0.03696294
+## temporality   1.797635e-43 0.000000e+00  0.2753910929 0.9620458730 0.61148549
+## expectability 6.369483e-01 2.753911e-01  0.0000000000 0.0002818333 0.62437362
+## relativity    8.774436e-02 9.620459e-01  0.0002818333 0.0000000000 0.54980391
+## positive      3.696294e-02 6.114855e-01  0.6243736176 0.5498039074 0.00000000
+## 
+## $statistic
+##                   gender temporality expectability relativity   positive
+## gender         0.0000000  18.0784116     0.4727145  1.7160766 -2.1006588
+## temporality   18.0784116   0.0000000     1.0938180 -0.0476479 -0.5087787
+## expectability  0.4727145   1.0938180     0.0000000  3.6989456  0.4904445
+## relativity     1.7160766  -0.0476479     3.6989456  0.0000000  0.5991019
+## positive      -2.1006588  -0.5087787     0.4904445  0.5991019  0.0000000
+## 
+## $n
+## [1] 199
+## 
+## $gp
+## [1] 3
+## 
+## $method
+## [1] "pearson"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{spcor}\NormalTok{(no_miss, }\DataTypeTok{method =} \StringTok{"pearson"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $estimate
+##                    gender  temporality expectability  relativity    positive
+## gender         1.00000000  0.726030568    0.01898425  0.06891778 -0.08436264
+## temporality    0.73797712  1.000000000    0.04465064 -0.00194503 -0.02076881
+## expectability  0.03189244  0.073796190    1.00000000  0.24955531  0.03308863
+## relativity     0.11532455 -0.003202056    0.24857821  1.00000000  0.04026112
+## positive      -0.14410849 -0.034903017    0.03364526  0.04109933  1.00000000
+## 
+## $p.value
+##                     gender  temporality expectability   relativity  positive
+## gender        0.000000e+00 2.214962e-33  0.7917002840 0.3371462115 0.2397470
+## temporality   5.633521e-35 0.000000e+00  0.5343229323 0.9784148496 0.7726314
+## expectability 6.572225e-01 3.039778e-01  0.0000000000 0.0004196575 0.6452264
+## relativity    1.074871e-01 9.644723e-01  0.0004428427 0.0000000000 0.5752902
+## positive      4.388946e-02 6.272049e-01  0.6396748967 0.5673545180 0.0000000
+## 
+## $statistic
+##                   gender temporality expectability  relativity   positive
+## gender         0.0000000  14.7055230     0.2644677  0.96220142 -1.1792394
+## temporality   15.2318316   0.0000000     0.6225323 -0.02709119 -0.2893384
+## expectability  0.4444364   1.0306723     0.0000000  3.58947223  0.4611238
+## relativity     1.6170745  -0.0445997     3.5744906  0.00000000  0.5612275
+## positive      -2.0283714  -0.4864392     0.4688898  0.57293151  0.0000000
+## 
+## $n
+## [1] 199
+## 
+## $gp
+## [1] 3
+## 
+## $method
+## [1] "pearson"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"The correlation between gender and temporality are significantly high for both partial and semipartial correlations."}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "The correlation between gender and temporality are significantly high for both partial and semipartial correlations."
+\end{verbatim}
+
+\hypertarget{theory}{%
+\section{Theory:}\label{theory}}
+
+\begin{verbatim}
+- What are we using as our model for understanding the data in a correlational analysis?
+
+We are using Pearson's model for understanding the data in a correlational analysis.
+
+
+- How might we determine model fit?
+By using the correlation coefficient, we get r which we can look to determine the model fit or the strength of the relationship.
+
+- What is the difference between correlation and covariance?
+Correlation tells us the measure of relationship between two variables. It is the the extent to which they are related.
+
+Covariance tells us by how much scores on two variables differ from their respective means.
+
+- What is the difference between R and r?
+R = correlation coefficient for 3+ variables
+r = correlation coefficient for 2 variables
+
+- When would I want to use a nonparametric correlation over Pearson's correlation?
+
+Pearson’s correlation is used on the ranked data. We use nonparametric correlation when the data is not ranked.
+
+- What is the distinction between semi-partial and partial correlations? 
+A partial correlation measures the relationship between two variables, controlling for the effect that a third
+variable has on them both.
+
+A semi-partial correlation measures the relationship between two variables controlling for the effect that a third
+variable has on only one of the others.
+\end{verbatim}
+
+\end{document}

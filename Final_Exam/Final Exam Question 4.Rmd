@@ -1,0 +1,302 @@
+---
+title: "Final Exam Question 4"
+author: "Karmanya Pathak"
+date: "4/25/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+(1) The t-test :
+
+Capture a t-test to compare the  Sepal.Length of the Species (Setosa & Versicolor Only) from the iris dataset. 
+Capture a summary. 
+Provide an interpretation of the results in your own words.  Support your response with results captured from performing a t-test.
+
+## Final Exam Question 4: t-test
+
+- id: ID
+- Species: 3 Species of flowers
+- Sepal.Length: Sepal length in cms
+- Sepal.width: Sepal width in cms
+- Petal.Length: Petal length in cms
+- Petal.Width: Petal width in cms
+
+```{r iris}
+
+iris_data <- read.csv("D:/Harrisburg/Lectures/Spring 2020/ANLY 500 - Principles of Analytics I/Final Exam/Question 4/iris_exams.csv")
+
+#Using a copy of the dataset in case we need to access the original data
+
+iris <- iris_data
+
+summary(iris)
+  
+
+```
+
+
+## Hypothesis:
+
+- Null Hypothesis H0 : Sepal.Length has no effect on Species (Setosa & Versicolor Only). That is to say that the difference between the observed Sepal.Length values for various Species are not statistically different
+
+- Alternate Hypothese Ha : Sepal.Length has some effect on Species (Setosa & Versicolor Only). That is to say that the difference between the observed Sepal.Length values for various Species are in fact different from each other.
+
+```{r library}
+
+#Loading all the libraries
+
+library(MOTE)
+library(reshape)
+library(pwr)
+library(ggplot2)
+library(corrplot)
+library(moments)
+library(biotools)
+
+
+#Use the template for the plots
+
+cleanup = theme(panel.grid.major = element_blank(), 
+                panel.grid.minor = element_blank(), 
+                panel.background = element_blank(), 
+                axis.line.x = element_line(color = "black"),
+                axis.line.y = element_line(color = "black"),
+                legend.key = element_rect(fill = "white"),
+                text = element_text(size = 15))
+  
+
+
+
+```
+
+
+## Data Screening:
+
+## Accuracy, Missing Data:
+
+The data is clean and no missing data (NAs).
+
+Since there are no missing values, there is no need to omit any observations.
+
+```{r Data Screening}
+
+#Accuracy, missing data
+
+summary(iris)
+
+
+```
+
+## Outliers:
+
+The cut off score for the mahalanobis measure is 18.46683
+
+There were 2 outliers in the dataset
+
+
+```{r Outliers}
+
+# Since we can calculatate means of variables using mahalanobis(in general as well) on only numeric variables, 
+# we would be ignoring factor variables id and Species
+
+mahal = mahalanobis(iris[,-c(1,2)], colMeans(iris[,-c(1,2)]), cov(iris[,-c(1,2)]))
+
+#Calculating the cutoff score
+
+cutoff = qchisq(0.999,ncol(iris[,-c(1,2)]))
+
+
+#Degrees of freedom
+
+#ncol(iris[,-c(1,2)])
+
+#Printing the cutoff score
+
+cutoff
+
+#Checking to see number of outliers in iris
+
+summary(mahal > cutoff)
+
+#Creating a new dataframe without the 2 outliers
+
+iris_no_outliers <- subset(iris, mahal < cutoff)
+
+#Checking the new dataframe without the outliers
+
+str(iris_no_outliers)
+
+summary(iris_no_outliers)
+
+
+```
+
+
+## Assumptions:
+
+## Additivity:
+
+The model meets the assumption for additivity, and we have multicollinearity.
+
+```{r }
+
+corrplot(cor(iris_no_outliers[,-c(1,2)]))
+
+cor(iris_no_outliers[,-c(1,2)])
+
+
+```
+
+
+## Linearity: 
+
+I think the model meets the assumption for linearity.
+
+We are deviating from linearity, but there are not enough points to dismiss or violate linearity.
+
+```{r linearity}
+
+#We are removing one factor variable id to run a linear model
+
+iris_no_id <- iris[,-1]
+
+
+random <- rchisq(nrow(iris_no_id),4)
+fake <- lm(random~., data = iris_no_id)
+#summary(fake)
+standardized <- rstudent(fake)
+fitted <- scale(fake$fitted.values)
+
+#Generating the linearity graph
+
+{qqnorm(standardized)
+abline(0,1)}
+
+
+
+
+```
+
+
+## Normality: 
+
+
+Although we have a slight skew in the data, it is not enough to violate normality.
+
+
+```{r normality}
+
+
+hist(standardized, breaks=15)
+
+
+```
+
+
+
+## Homogeneity/Homoscedasticity: 
+
+# Homogeneity:
+
+Apart from a few observations, the variances of the variables seem to be equal on both sides (-3 to 3).
+
+
+#Homoscedasticity:
+
+Apart from a few observations, the scatter is fairly equal from the lowest point to the largest point, letting us accept the assumption for homoscedasticity.
+
+
+
+
+```{r homog-s}
+
+#Plotting the values:
+
+plot(fitted, standardized) 
+abline(0,0)
+abline(v = 0)
+
+```
+
+
+# Independent t-test:
+
+
+```{r ind1}
+
+# Creating a new data frame including only the Setosa & Versicolor species.
+
+iris_limited_species <- iris_no_outliers[which(iris_no_outliers$Species == "setosa" | iris_no_outliers$Species == "versicolor"),]
+
+# Independent t-test: equal variances
+
+t.test(Sepal.Length ~ Species, data = iris_limited_species, var.equal = TRUE, paired = FALSE)
+
+#Calculating mean, standard deviation, and length
+
+M = tapply(iris_limited_species$Sepal.Length, iris_limited_species$Species, mean, na.rm = TRUE)
+stdev = tapply(iris_limited_species$Sepal.Length, iris_limited_species$Species, sd, na.rm = TRUE)
+N = tapply(iris_limited_species$Sepal.Length, iris_limited_species$Species, length)
+
+M;stdev;N
+
+
+```
+
+
+Using Cohens D - the effect size is very large
+
+```{r t-test effect size}
+
+effect = d.ind.t(m1 = M[1], m2 = M[2],        
+sd1 = stdev[1], sd2 = stdev[2],        
+n1 = N[1], n2 = N[2], a = .05)
+effect$d
+
+
+```
+
+We would need 5 Sepal.Length observations for each species.
+
+```{r Power}
+
+pwr.t.test(n = NULL, d = effect$d, 
+sig.level = .05,           
+power = .80, type = "two.sample", 
+alternative = "two.sided")
+
+
+```
+
+```{r graph}
+
+bargraph = ggplot(iris_limited_species, aes(Sepal.Length, Species))
+
+bargraph +
+  cleanup +
+  stat_summary(fun = mean, 
+               geom = "bar", 
+               fill = "White", 
+               color = "Black") +
+  stat_summary(fun.data = mean_cl_normal, 
+               geom = "errorbar", 
+               width = .2, 
+               position = "dodge") +
+  xlab("Average Sepal length values for the Species") +
+  ylab("Species")
+
+
+```
+
+
+
+t-test interpretation from the t-test and analysis above:
+
+
+Since the p-value (< 2.2e-16) is less than 0.05, we will reject the null hypothesis, implying that our alternate hypothesis is correct. Our data is significant, the true difference in means is not equal to 0. Sepal.Length has some effect on species and their values for various Species are in fact different from each other.
+
+Both species have significant Sepal/Length. Versicolor (M = 5.99, SD = 0.55) has a higher Sepal.Length than Setosa (M = 5.09, SD = 0.31), t(192) = -14.05, p < 0.001, effect size = -1.986224, 95% CI[-1.017, -0.77]
+

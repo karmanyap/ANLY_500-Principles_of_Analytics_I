@@ -1,0 +1,1889 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={t-Tests},
+  pdfauthor={Karmanya Pathak},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{t-Tests}
+\author{Karmanya Pathak}
+\date{2020-04-14}
+
+\begin{document}
+\maketitle
+
+\emph{Title}: Estimation of physical activity levels using cell phone
+questionnaires: A comparison with accelerometry for evaluation of
+between-subject and within-subject variations
+
+\emph{Abstract}: Physical activity promotes health and longevity. From a
+business perspective, healthier employees are more likely to report to
+work, miss less days, and cost less for health insurance. Your business
+wants to encourage healthy livestyles in a cheap and affordable way
+through health care incentive programs. The use of telecommunication
+technologies such as cell phones is highly interesting in this respect.
+In an earlier report, we showed that physical activity level (PAL)
+assessed using a cell phone procedure agreed well with corresponding
+estimates obtained using the doubly labeled water method. However, our
+earlier study indicated high within-subject variation in relation to
+between-subject variations in PAL using cell phones, but we could not
+assess if this was a true variation of PAL or an artifact of the cell
+phone technique. Objective: Our objective was to compare within- and
+between-subject variations in PAL by means of cell phones with
+corresponding estimates using an accelerometer. In addition, we compared
+the agreement of daily PAL values obtained using the cell phone
+questionnaire with corresponding data obtained using an accelerometer.
+
+\hypertarget{dataset}{%
+\section{Dataset:}\label{dataset}}
+
+\begin{verbatim}
+-   Gender: male and female subjects were examined in this experiment.
+-   PAL_cell: average physical activity values for the cell phone accelerometer (range 0-100).
+-   PAL_acc: average physical activity values for the hand held accelerometer (range 0-100).
+\end{verbatim}
+
+APA write ups should include means, standard deviation/error, t-values,
+p-values, effect size, and a brief description of what happened in plain
+English.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dfdata <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"D:/Harrisburg/Lectures/Spring 2020/ANLY 500 - Principles of Analytics I/Assignment 9/09_data.csv"}\NormalTok{)}
+
+\NormalTok{df <-}\StringTok{ }\NormalTok{dfdata}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{data-screening}{%
+\section{Data screening:}\label{data-screening}}
+
+\hypertarget{accuracy}{%
+\subsection{Accuracy:}\label{accuracy}}
+
+\begin{verbatim}
+a)  Include output and indicate how the data are not accurate.
+b)  Include output to show how you fixed the accuracy errors, and describe what you did.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#a}
+
+\KeywordTok{summary}\NormalTok{(df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     gender       PAL_cell        PAL_acc     
+##  female:100   Min.   :38.32   Min.   :23.68  
+##  male  :100   1st Qu.:56.18   1st Qu.:52.10  
+##               Median :64.79   Median :63.33  
+##               Mean   :65.60   Mean   :62.05  
+##               3rd Qu.:74.11   3rd Qu.:70.31  
+##               Max.   :90.21   Max.   :93.61  
+##               NA's   :6       NA's   :6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#b}
+
+\CommentTok{#i.}
+\StringTok{"The gender variable does not have any errors in factoring the variables into the two levels: male and female."}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "The gender variable does not have any errors in factoring the variables into the two levels: male and female."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"PAL_cell observations are within the range of 0-100 showing no accuracy errors"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "PAL_cell observations are within the range of 0-100 showing no accuracy errors"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"PAL_acc observations are within the range of 0-100 showing no accuracy errors"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "PAL_acc observations are within the range of 0-100 showing no accuracy errors"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"Since there were no errors, we will move on to the next step."}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Since there were no errors, we will move on to the next step."
+\end{verbatim}
+
+\hypertarget{missing-data}{%
+\subsection{Missing data:}\label{missing-data}}
+
+\begin{verbatim}
+a)  Include output that shows you have missing data.
+b)  Include output and a description that shows what you did with the missing data.
+    
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#a.}
+
+\KeywordTok{summary}\NormalTok{(df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     gender       PAL_cell        PAL_acc     
+##  female:100   Min.   :38.32   Min.   :23.68  
+##  male  :100   1st Qu.:56.18   1st Qu.:52.10  
+##               Median :64.79   Median :63.33  
+##               Mean   :65.60   Mean   :62.05  
+##               3rd Qu.:74.11   3rd Qu.:70.31  
+##               Max.   :90.21   Max.   :93.61  
+##               NA's   :6       NA's   :6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#b.}
+
+
+\CommentTok{#Calculating percent missing by row/column}
+
+\NormalTok{percentmiss =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}\KeywordTok{sum}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(x))}\OperatorTok{/}\KeywordTok{length}\NormalTok{(x)}\OperatorTok{*}\DecValTok{100}\NormalTok{\}}
+
+\CommentTok{#Using apply to get percent missing by rows}
+
+\KeywordTok{apply}\NormalTok{(df,}\DecValTok{1}\NormalTok{,percentmiss)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   [1]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+##   [9]  0.00000  0.00000 33.33333  0.00000  0.00000  0.00000  0.00000  0.00000
+##  [17]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+##  [25]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+##  [33]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+##  [41]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+##  [49]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000 33.33333
+##  [57]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+##  [65]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+##  [73]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+##  [81]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+##  [89] 33.33333  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+##  [97]  0.00000 33.33333  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+## [105]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000 33.33333  0.00000
+## [113]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+## [121]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+## [129]  0.00000  0.00000  0.00000  0.00000  0.00000 33.33333  0.00000  0.00000
+## [137]  0.00000  0.00000  0.00000 33.33333  0.00000  0.00000  0.00000  0.00000
+## [145] 33.33333  0.00000  0.00000  0.00000 33.33333  0.00000  0.00000  0.00000
+## [153]  0.00000  0.00000  0.00000  0.00000  0.00000 33.33333  0.00000  0.00000
+## [161]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+## [169]  0.00000  0.00000 33.33333  0.00000  0.00000  0.00000  0.00000  0.00000
+## [177]  0.00000  0.00000  0.00000  0.00000 33.33333  0.00000  0.00000  0.00000
+## [185]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+## [193]  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Using the table function}
+
+\NormalTok{missing =}\StringTok{ }\KeywordTok{apply}\NormalTok{(df,}\DecValTok{1}\NormalTok{,percentmiss)}
+\KeywordTok{table}\NormalTok{(missing)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## missing
+##                0 33.3333333333333 
+##              188               12
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Using the base R function subset() and a logical operator to remove the target data}
+
+\NormalTok{replace =}\StringTok{ }\KeywordTok{subset}\NormalTok{(df, missing }\OperatorTok{<=}\StringTok{ }\DecValTok{5}\NormalTok{)}
+\NormalTok{missing1 =}\StringTok{ }\KeywordTok{apply}\NormalTok{(replace,}\DecValTok{1}\NormalTok{,percentmiss)}
+\KeywordTok{table}\NormalTok{(missing1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## missing1
+##   0 
+## 188
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dont =}\StringTok{ }\KeywordTok{subset}\NormalTok{(df, missing }\OperatorTok{>}\StringTok{ }\DecValTok{5}\NormalTok{)}
+\NormalTok{missing2 =}\StringTok{ }\KeywordTok{apply}\NormalTok{(dont,}\DecValTok{1}\NormalTok{,percentmiss)}
+\KeywordTok{table}\NormalTok{(missing2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## missing2
+## 33.3333333333333 
+##               12
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Using apply to get percent missing by columns and rows.}
+
+\KeywordTok{apply}\NormalTok{(df,}\DecValTok{2}\NormalTok{,percentmiss)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   gender PAL_cell  PAL_acc 
+##        0        3        3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Figuring out the columns to exclude}
+
+\NormalTok{replace_col =}\StringTok{ }\NormalTok{replace[,}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)]}
+\NormalTok{dont_col =}\StringTok{ }\NormalTok{replace[,}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{)]}
+
+\NormalTok{replace_col}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     PAL_cell  PAL_acc
+## 1   72.40066 85.13709
+## 2   76.20630 74.69591
+## 3   73.98942 66.78421
+## 4   70.86654 65.42329
+## 5   54.85979 67.45573
+## 6   77.94282 83.29492
+## 7   69.10676 66.72679
+## 8   75.06444 72.38542
+## 9   67.69080 51.96535
+## 10  73.09569 74.52627
+## 12  80.78854 76.22710
+## 13  69.15105 55.73944
+## 14  78.67619 75.56661
+## 15  82.18401 69.32911
+## 16  72.58820 63.84420
+## 17  60.87529 69.85222
+## 18  85.41949 76.42442
+## 19  70.37954 71.35484
+## 20  83.94432 68.90708
+## 21  74.77834 72.58528
+## 22  81.98231 82.64728
+## 23  71.15374 65.44653
+## 24  74.15020 68.27504
+## 25  77.69286 68.54270
+## 26  70.83203 70.76582
+## 27  63.31361 61.36974
+## 28  73.02704 74.19590
+## 29  72.09981 66.95895
+## 30  63.97390 64.39100
+## 31  72.58673 70.32438
+## 32  65.10007 63.20199
+## 33  78.44840 69.24535
+## 34  90.20974 74.28566
+## 35  76.29339 69.63127
+## 36  84.48446 82.24103
+## 37  85.05544 85.06944
+## 38  73.58779 71.51264
+## 39  77.73236 65.72712
+## 40  71.87971 62.63152
+## 41  74.22921 79.42484
+## 42  79.12335 77.72989
+## 43  77.81938 79.05049
+## 44  70.53629 62.96650
+## 45  70.21235 69.74629
+## 46  73.09886 75.34871
+## 47  73.05615 60.70008
+## 48  71.42321 60.54920
+## 49  67.35080 61.52205
+## 50  67.76346 59.40208
+## 51  75.17958 76.61716
+## 52  74.36841 67.98103
+## 53  74.75978 80.62047
+## 54  85.83422 84.72877
+## 55  59.01956 58.80825
+## 57  77.92786 69.73073
+## 58  73.04482 64.76127
+## 59  72.27433 72.46516
+## 60  69.30512 62.88790
+## 61  83.51824 71.18580
+## 62  81.21881 72.34388
+## 63  78.26640 74.30442
+## 64  62.03873 59.75686
+## 65  70.13390 61.71612
+## 66  72.74588 62.37041
+## 67  79.75515 65.21518
+## 68  78.82194 74.06599
+## 69  73.43624 70.22329
+## 70  75.83945 73.76037
+## 71  81.93459 81.67263
+## 72  80.77801 77.81682
+## 73  64.43894 65.08917
+## 74  72.08516 70.26244
+## 75  78.00316 78.94466
+## 76  83.20079 76.82530
+## 77  70.88418 70.50792
+## 78  63.57674 69.44665
+## 79  63.16931 67.03521
+## 80  72.56283 62.17079
+## 81  89.17631 89.55789
+## 82  76.05633 69.84945
+## 83  76.45301 74.18723
+## 84  74.74410 70.95525
+## 85  72.70072 77.68018
+## 86  57.10979 50.91406
+## 87  69.53812 64.62771
+## 88  79.49428 77.88638
+## 90  76.53631 65.10021
+## 91  61.86042 55.38719
+## 92  72.37911 63.38324
+## 93  84.80513 93.61153
+## 94  71.00770 63.23412
+## 95  80.93253 66.94887
+## 96  64.30733 64.17174
+## 97  87.28041 88.56379
+## 99  88.85660 73.47615
+## 100 82.48643 77.68277
+## 101 51.61617 58.68589
+## 102 65.18437 57.70243
+## 103 57.64609 35.83308
+## 104 52.65465 58.33321
+## 105 52.79972 49.27249
+## 106 61.22621 64.83852
+## 107 53.11536 51.38023
+## 108 54.97204 62.55315
+## 109 69.58666 69.76546
+## 110 46.18362 48.70055
+## 112 56.99469 54.35568
+## 113 52.96550 50.19385
+## 114 63.72053 41.00579
+## 115 40.44474 32.03325
+## 116 56.43876 48.32114
+## 117 57.44746 39.19651
+## 118 53.88530 46.02029
+## 119 57.56152 62.83069
+## 120 56.17491 58.99761
+## 121 64.13529 66.34725
+## 122 67.48030 49.45218
+## 123 52.13486 47.63474
+## 124 58.05918 66.40554
+## 125 59.45339 68.92822
+## 126 49.89824 33.10536
+## 127 53.05295 46.00729
+## 128 64.13864 51.41680
+## 129 55.02725 53.57064
+## 130 62.11600 63.63849
+## 131 54.16150 47.78755
+## 132 63.86423 67.83212
+## 133 50.22861 42.40144
+## 135 68.85694 52.27123
+## 136 62.06255 53.79299
+## 137 44.51481 47.59281
+## 138 48.96164 55.87022
+## 139 56.81095 60.90199
+## 141 47.69097 43.81672
+## 142 53.19834 57.44358
+## 143 75.27942 68.59210
+## 144 55.91038 59.53518
+## 146 62.51879 51.33876
+## 147 64.53802 60.29570
+## 148 51.51604 44.78489
+## 150 58.14629 60.51631
+## 151 56.52489 45.40964
+## 152 54.85047 51.40235
+## 153 53.87972 57.88170
+## 154 59.87210 60.05342
+## 155 53.44192 35.38198
+## 156 59.22587 44.10200
+## 157 61.59893 51.29445
+## 159 62.29155 42.43408
+## 160 50.19602 52.92045
+## 161 50.04900 36.11085
+## 162 57.45845 40.13131
+## 163 56.16289 53.32869
+## 164 41.33261 32.92871
+## 165 56.18455 49.92067
+## 166 59.32556 52.47657
+## 167 43.66115 46.51591
+## 168 48.47569 61.89426
+## 169 55.57443 55.94758
+## 170 48.07971 49.88020
+## 172 51.11496 42.37556
+## 173 71.83952 65.91051
+## 174 67.15514 63.35668
+## 175 50.49121 52.62987
+## 176 57.45351 64.45908
+## 177 53.12413 46.87762
+## 178 78.41438 72.41687
+## 179 63.81935 46.19356
+## 180 65.04580 66.79433
+## 182 57.38294 51.63852
+## 183 54.11657 58.85881
+## 184 62.98630 53.92426
+## 185 62.07738 67.68527
+## 186 52.80706 47.72861
+## 187 62.48116 45.35127
+## 188 63.07072 51.91120
+## 189 56.01933 63.30425
+## 190 56.45436 54.26130
+## 191 55.00434 68.80738
+## 192 48.82976 23.67757
+## 193 59.77469 48.88453
+## 194 46.99448 47.17938
+## 195 54.98826 49.96129
+## 196 60.52378 45.77332
+## 197 68.86984 82.99691
+## 198 54.72164 52.03885
+## 199 48.96753 57.14461
+## 200 38.32457 50.86522
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dont_col}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   [1] male   male   male   male   male   male   male   male   male   male  
+##  [11] male   male   male   male   male   male   male   male   male   male  
+##  [21] male   male   male   male   male   male   male   male   male   male  
+##  [31] male   male   male   male   male   male   male   male   male   male  
+##  [41] male   male   male   male   male   male   male   male   male   male  
+##  [51] male   male   male   male   male   male   male   male   male   male  
+##  [61] male   male   male   male   male   male   male   male   male   male  
+##  [71] male   male   male   male   male   male   male   male   male   male  
+##  [81] male   male   male   male   male   male   male   male   male   male  
+##  [91] male   male   male   male   male   male   female female female female
+## [101] female female female female female female female female female female
+## [111] female female female female female female female female female female
+## [121] female female female female female female female female female female
+## [131] female female female female female female female female female female
+## [141] female female female female female female female female female female
+## [151] female female female female female female female female female female
+## [161] female female female female female female female female female female
+## [171] female female female female female female female female female female
+## [181] female female female female female female female female
+## Levels: female male
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Loading the mice package}
+
+\KeywordTok{library}\NormalTok{(mice)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'mice' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'mice'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     cbind, rbind
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+
+\CommentTok{#Setting a temporary placeholder variable name}
+
+\NormalTok{temp_no_miss =}\StringTok{ }\KeywordTok{mice}\NormalTok{(replace_col)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  iter imp variable
+##   1   1
+##   1   2
+##   1   3
+##   1   4
+##   1   5
+##   2   1
+##   2   2
+##   2   3
+##   2   4
+##   2   5
+##   3   1
+##   3   2
+##   3   3
+##   3   4
+##   3   5
+##   4   1
+##   4   2
+##   4   3
+##   4   4
+##   4   5
+##   5   1
+##   5   2
+##   5   3
+##   5   4
+##   5   5
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Replacing the data back into the dataset can be done using the following}
+
+\NormalTok{no_miss =}\StringTok{ }\KeywordTok{complete}\NormalTok{(temp_no_miss,}\DecValTok{1}\NormalTok{)}
+
+\KeywordTok{summary}\NormalTok{(no_miss)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     PAL_cell        PAL_acc     
+##  Min.   :38.32   Min.   :23.68  
+##  1st Qu.:56.18   1st Qu.:51.95  
+##  Median :64.79   Median :63.27  
+##  Mean   :65.68   Mean   :61.89  
+##  3rd Qu.:74.26   3rd Qu.:70.28  
+##  Max.   :90.21   Max.   :93.61
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Put everything back together, We want to take our replaced data, and add back in our columns we could’t replace.}
+
+\NormalTok{all_col =}\StringTok{ }\KeywordTok{cbind}\NormalTok{(dont_col, no_miss)}
+
+\KeywordTok{names}\NormalTok{(all_col)[}\DecValTok{1}\NormalTok{] <-}\StringTok{ "gender"}
+
+\KeywordTok{summary}\NormalTok{(all_col)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     gender      PAL_cell        PAL_acc     
+##  female:92   Min.   :38.32   Min.   :23.68  
+##  male  :96   1st Qu.:56.18   1st Qu.:51.95  
+##              Median :64.79   Median :63.27  
+##              Mean   :65.68   Mean   :61.89  
+##              3rd Qu.:74.26   3rd Qu.:70.28  
+##              Max.   :90.21   Max.   :93.61
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Adding back in our rows we couldn’t replace:}
+
+\NormalTok{all_rows =}\StringTok{ }\KeywordTok{rbind}\NormalTok{(dont, all_col)}
+\KeywordTok{summary}\NormalTok{(all_rows)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     gender       PAL_cell        PAL_acc     
+##  female:100   Min.   :38.32   Min.   :23.68  
+##  male  :100   1st Qu.:56.18   1st Qu.:52.10  
+##               Median :64.79   Median :63.33  
+##               Mean   :65.60   Mean   :62.05  
+##               3rd Qu.:74.11   3rd Qu.:70.31  
+##               Max.   :90.21   Max.   :93.61  
+##               NA's   :6       NA's   :6
+\end{verbatim}
+
+\hypertarget{outliers}{%
+\subsection{Outliers:}\label{outliers}}
+
+\begin{verbatim}
+a)  Include a summary of your mahal scores that are greater than the cutoff.
+b)  What are the df for your Mahalanobis cutoff?
+c)  What is the cut off score for your Mahalanobis measure?
+d)  How many outliers did you have?
+e)  Delete all outliers. 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#a.}
+
+\KeywordTok{str}\NormalTok{(no_miss)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    188 obs. of  2 variables:
+##  $ PAL_cell: num  72.4 76.2 74 70.9 54.9 ...
+##  $ PAL_acc : num  85.1 74.7 66.8 65.4 67.5 ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mahal =}\StringTok{ }\KeywordTok{mahalanobis}\NormalTok{(no_miss,}
+                    \KeywordTok{colMeans}\NormalTok{(no_miss, }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{),}
+                    \KeywordTok{cov}\NormalTok{(no_miss, }\DataTypeTok{use =}\StringTok{"pairwise.complete.obs"}\NormalTok{)}
+\NormalTok{                    )}
+\NormalTok{mahal}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   [1]  5.59305209  1.05237620  0.64755507  0.22937406  5.02433951  3.07218805
+##   [7]  0.14514084  0.75373720  2.46796892  1.05624806  1.76686472  1.61340111
+##  [13]  1.37133336  3.05608249  0.68641955  2.84053239  3.17560059  0.65693576
+##  [19]  4.11950255  0.75026211  2.70998539  0.26322016  0.57821931  1.41153818
+##  [25]  0.52403423  0.08812773  0.99282146  0.32567848  0.30921806  0.45550463
+##  [31]  0.06164382  1.55190715  6.26253587  0.92287208  2.93467767  3.48282156
+##  [37]  0.59407057  1.97915025  0.70765829  2.28409843  1.64302341  1.82923707
+##  [43]  0.37240908  0.41188679  1.24202379  1.49839406  1.00093025  0.08352078
+##  [49]  0.37018099  1.37528893  0.63235368  2.61653851  3.52544392  0.48844104
+##  [55]  1.32955541  0.66481564  0.71835507  0.19145635  3.24406808  2.07267071
+##  [61]  1.24100645  0.12435653  0.46100164  0.99236197  3.05594887  1.33130972
+##  [67]  0.49623098  0.92835659  2.51112549  1.85396762  0.34015484  0.43749184
+##  [73]  1.80505740  2.37230776  0.48399235  1.61055035  1.01550361  0.98009969
+##  [79]  5.01553405  0.86070181  1.01539067  0.64748248  1.97295652  0.75683952
+##  [85]  0.12396227  1.69778051  1.66180807  0.28028750  0.70696279  6.56841524
+##  [91]  0.42780936  3.10646171  0.23222121  4.53150656  5.63148771  2.18189395
+##  [97]  3.08595087  0.25056541  6.79039237  2.47136705  1.29588184  1.00435146
+## [103]  1.22384479  2.74521951  0.45500430  3.24859579  0.58101173  1.24451372
+## [109]  6.50859226  5.82237669  1.15119399  4.67300999  1.56626572  1.70159290
+## [115]  1.25498029  0.62145096  3.52290742  1.48968987  2.72460234  3.11580922
+## [121]  5.70701124  1.59455507  1.48276102  0.89920121  0.52946446  1.27266431
+## [127]  1.03838269  2.39810888  2.83157072  0.51828077  3.83216846  3.57284627
+## [133]  1.46233181  2.55530269  2.00243573  0.77370489  1.45915237  1.13208569
+## [139]  0.01585641  1.88642553  0.94814631  1.85644705  0.91245577  1.83445203
+## [145]  0.45990715  5.42491548  2.87121490  0.98069327  4.86193499  2.27047917
+## [151]  4.32918422  4.18526629  0.69634914  5.45860635  0.90492819  0.55529627
+## [157]  4.06581358  6.48920837  0.95690166  2.63338810  2.36922376  0.33226083
+## [163]  0.01711835  2.10975352  2.26967421  1.46198479  1.26186478  3.51227115
+## [169]  0.53228254  0.66954768  1.98008882  0.60197362  1.54014944  1.39578868
+## [175]  3.38880894  1.08653946  2.51347605  0.66157100  5.68722462 11.63336297
+## [181]  1.32151204  2.75851835  0.97623031  2.54430028  5.96794345  0.92326558
+## [187]  4.00277010  8.98180853
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"Cut off score"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Cut off score"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cutoff =}\StringTok{ }\KeywordTok{qchisq}\NormalTok{(}\DecValTok{1}\FloatTok{-.001}\NormalTok{,}\KeywordTok{ncol}\NormalTok{(no_miss))}
+\KeywordTok{print}\NormalTok{(cutoff)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 13.81551
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(mahal }\OperatorTok{>}\StringTok{ }\NormalTok{cutoff)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Mode   FALSE 
+## logical     188
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"There are 0 observations of mahal scores that are greater than the cutoff."}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "There are 0 observations of mahal scores that are greater than the cutoff."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#b.}
+
+\StringTok{"The df of Mahalanobis cutoff is 187 (n -1)"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "The df of Mahalanobis cutoff is 187 (n -1)"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#c.}
+
+\KeywordTok{print}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{"The cut off score for the Mahalanobis measure is "}\NormalTok{,cutoff))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "The cut off score for the Mahalanobis measure is 13.8155105579643"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#d.}
+
+\StringTok{"We got 0 outliers."}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "We got 0 outliers."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#e.}
+
+\StringTok{"Since there were no outliers, we did not delete any observations."}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Since there were no outliers, we did not delete any observations."
+\end{verbatim}
+
+\hypertarget{assumptions}{%
+\section{Assumptions:}\label{assumptions}}
+
+\hypertarget{additivity}{%
+\subsection{Additivity:}\label{additivity}}
+
+\begin{verbatim}
+a)  We won't need to calculate a correlation table. Why not?
+
+Finding correlation between variables and creating a correlation table will only be necessary if you have multiple continuous variables. Since we have only one factor variable and two numeric variables in the original dataset, we would not need to calculte a correlation table.
+\end{verbatim}
+
+\hypertarget{linearity}{%
+\subsection{Linearity:}\label{linearity}}
+
+\begin{verbatim}
+a)  Include a picture that shows how you might assess multivariate linearity.
+b)  Do you think you've met the assumption for linearity?
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#a.}
+
+\NormalTok{random =}\StringTok{ }\KeywordTok{rchisq}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(df), }\DecValTok{200}\NormalTok{)}
+
+\CommentTok{#Fake regression}
+
+\NormalTok{fake =}\StringTok{ }\KeywordTok{lm}\NormalTok{(random}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ df)}
+\KeywordTok{summary}\NormalTok{(fake)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = random ~ ., data = df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -40.237 -12.474  -1.291  11.531  54.973 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 221.7899    11.3648  19.516   <2e-16 ***
+## gendermale    7.0961     4.4921   1.580   0.1159    
+## PAL_cell     -0.4119     0.2416  -1.705   0.0898 .  
+## PAL_acc       0.0233     0.1898   0.123   0.9024    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 19.2 on 184 degrees of freedom
+##   (12 observations deleted due to missingness)
+## Multiple R-squared:  0.02199,    Adjusted R-squared:  0.006046 
+## F-statistic: 1.379 on 3 and 184 DF,  p-value: 0.2506
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ standardized =}\StringTok{ }\KeywordTok{rstudent}\NormalTok{(fake)}
+\KeywordTok{qqnorm}\NormalTok{(standardized)}
+\KeywordTok{abline}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{09_lab_files/figure-latex/linearity-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#b.}
+
+\StringTok{"Since the plot follows a pretty normal path along the abline with an exception of a few curves towards the end of both ends within boundary to give us a good fit, we can assume that we have met the assumption for linearity. "}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Since the plot follows a pretty normal path along the abline with an exception of a few curves towards the end of both ends within boundary to give us a good fit, we can assume that we have met the assumption for linearity. "
+\end{verbatim}
+
+\hypertarget{normality}{%
+\subsection{Normality:}\label{normality}}
+
+\begin{verbatim}
+a)  Include a picture that shows how you might assess multivariate normality.
+b)  Do you think you've met the assumption for normality? 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#a.}
+
+\KeywordTok{library}\NormalTok{(moments)}
+\KeywordTok{skewness}\NormalTok{(no_miss, }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    PAL_cell     PAL_acc 
+## -0.02463862 -0.23304988
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{kurtosis}\NormalTok{(no_miss, }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## PAL_cell  PAL_acc 
+## 2.164872 2.791265
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{hist}\NormalTok{(standardized, }\DataTypeTok{breaks=}\DecValTok{15}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{09_lab_files/figure-latex/normality-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#b.}
+
+\StringTok{"The skewness and kurtosis values are less than the absoloute value of 3 and the histgram seems to have a fairly even or normal distribution and be centered around 0 leading us to assume for normality."}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "The skewness and kurtosis values are less than the absoloute value of 3 and the histgram seems to have a fairly even or normal distribution and be centered around 0 leading us to assume for normality."
+\end{verbatim}
+
+\hypertarget{homogeneityhomoscedasticity}{%
+\subsection{Homogeneity/Homoscedasticity:}\label{homogeneityhomoscedasticity}}
+
+\begin{verbatim}
+a)  Include a picture that shows how you might assess multivariate homogeneity.
+b)  Do you think you've met the assumption for homogeneity?
+c)  Do you think you've met the assumption for homoscedasticity?
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#a.}
+
+\KeywordTok{library}\NormalTok{(biotools)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'biotools' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: rpanel
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'rpanel' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: tcltk
+\end{verbatim}
+
+\begin{verbatim}
+## Package `rpanel', version 1.1-4: type help(rpanel) for summary information
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: tkrplot
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: MASS
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: lattice
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: SpatialEpi
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'SpatialEpi' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: sp
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'sp' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{verbatim}
+## ---
+## biotools version 3.1
+\end{verbatim}
+
+\begin{verbatim}
+## 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{boxM}\NormalTok{(df[,}\OperatorTok{-}\DecValTok{1}\NormalTok{], df[,}\DecValTok{1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Box's M-test for Homogeneity of Covariance Matrices
+## 
+## data:  df[, -1]
+## Chi-Sq (approx.) = NaN, df = 3, p-value = NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Fit values standardized:}
+
+\NormalTok{fitvalues =}\StringTok{ }\KeywordTok{scale}\NormalTok{(fake}\OperatorTok{$}\NormalTok{fitted.values)}
+
+\CommentTok{#Plotting the values:}
+
+\KeywordTok{plot}\NormalTok{(fitvalues, standardized) }
+\KeywordTok{abline}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v =} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{09_lab_files/figure-latex/homog-s-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Alternatively:}
+
+\KeywordTok{plot}\NormalTok{(fake,}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{09_lab_files/figure-latex/homog-s-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#b.}
+
+\StringTok{"Since the spread above the line is similar to the spread below the 0, 0 line; we have met the assumption for Homogeneity."}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Since the spread above the line is similar to the spread below the 0, 0 line; we have met the assumption for Homogeneity."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#c.}
+
+\StringTok{"Since the spread is equal across the x axis; we have met the assumption for Homoscedasticity."}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Since the spread is equal across the x axis; we have met the assumption for Homoscedasticity."
+\end{verbatim}
+
+\hypertarget{independent-t-test}{%
+\section{Independent t-test:}\label{independent-t-test}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  Run an independent t-test to determine if there are differences in
+  gender for the cell phone measurement of physical activity level.
+
+  \begin{enumerate}
+  \def\labelenumii{\alph{enumii}.}
+  \tightlist
+  \item
+    Use the equal variances option to adjust for problems with
+    homogeneity (if necessary).
+  \item
+    Include means and sds for your groups.
+  \item
+    Is there a significant difference in the ratings?
+  \end{enumerate}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#a.}
+
+\KeywordTok{t.test}\NormalTok{(PAL_cell }\OperatorTok{~}\StringTok{ }\NormalTok{gender, }\DataTypeTok{data =}\NormalTok{ df, }\DataTypeTok{var.equal =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{paired =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Two Sample t-test
+## 
+## data:  PAL_cell by gender
+## t = -16.705, df = 192, p-value < 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -19.45255 -15.34406
+## sample estimates:
+## mean in group female   mean in group male 
+##             56.81278             74.21109
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#b.}
+
+\NormalTok{M =}\StringTok{ }\KeywordTok{tapply}\NormalTok{(df}\OperatorTok{$}\NormalTok{PAL_cell, df}\OperatorTok{$}\NormalTok{gender, mean, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{stdev =}\StringTok{ }\KeywordTok{tapply}\NormalTok{(df}\OperatorTok{$}\NormalTok{PAL_cell, df}\OperatorTok{$}\NormalTok{gender, sd, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{N =}\StringTok{ }\KeywordTok{tapply}\NormalTok{(df}\OperatorTok{$}\NormalTok{PAL_cell, df}\OperatorTok{$}\NormalTok{gender, length)}
+
+\NormalTok{M;stdev;N}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   female     male 
+## 56.81278 74.21109
+\end{verbatim}
+
+\begin{verbatim}
+##   female     male 
+## 7.337107 7.169276
+\end{verbatim}
+
+\begin{verbatim}
+## female   male 
+##    100    100
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#c.}
+
+\CommentTok{# Since the p-value (< 2.2e-16) is less than 0.05, we will reject the null hypothesis, implying that our alternate hypothesis is correct. Our data is significant, the true difference in means is not equal to 0 and there is a significant difference in the ratings.}
+
+\CommentTok{#Delete the comment below:}
+
+\CommentTok{#Interpret the results. Compare the P-value to the α significance level stated earlier. If it is less than α, reject the null hypothesis. If the result is greater than α, fail to reject the null hypothesis. If you reject the null hypothesis, this implies that your alternative hypothesis is correct, and that the data is significant. If you fail to reject the null hypothesis, this implies that there is no significant difference between the sample data and the given data.}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Effect size: What is the effect size for this difference? Be sure to
+  list which effect size you are using.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(MOTE)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'MOTE' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{verbatim}
+## Registered S3 methods overwritten by 'lme4':
+##   method                          from
+##   cooks.distance.influence.merMod car 
+##   influence.merMod                car 
+##   dfbeta.influence.merMod         car 
+##   dfbetas.influence.merMod        car
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{effect =}\StringTok{ }\KeywordTok{d.ind.t}\NormalTok{(}\DataTypeTok{m1 =}\NormalTok{ M[}\DecValTok{1}\NormalTok{], }\DataTypeTok{m2 =}\NormalTok{ M[}\DecValTok{2}\NormalTok{],        }
+\DataTypeTok{sd1 =}\NormalTok{ stdev[}\DecValTok{1}\NormalTok{], }\DataTypeTok{sd2 =}\NormalTok{ stdev[}\DecValTok{2}\NormalTok{],        }
+\DataTypeTok{n1 =}\NormalTok{ N[}\DecValTok{1}\NormalTok{], }\DataTypeTok{n2 =}\NormalTok{ N[}\DecValTok{2}\NormalTok{], }\DataTypeTok{a =} \FloatTok{.05}\NormalTok{)}
+\NormalTok{effect}\OperatorTok{$}\NormalTok{d}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   female 
+## -2.39855
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Power: Determine the number of participants you should have used in
+  this experiment given the effect size you found above.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(pwr)}
+\KeywordTok{pwr.t.test}\NormalTok{(}\DataTypeTok{n =} \OtherTok{NULL}\NormalTok{, }\DataTypeTok{d =}\NormalTok{ effect}\OperatorTok{$}\NormalTok{d, }
+\DataTypeTok{sig.level =} \FloatTok{.05}\NormalTok{,           }
+\DataTypeTok{power =} \FloatTok{.80}\NormalTok{, }\DataTypeTok{type =} \StringTok{"two.sample"}\NormalTok{, }
+\DataTypeTok{alternative =} \StringTok{"two.sided"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##      Two-sample t test power calculation 
+## 
+##               n = 3.962031
+##               d = 2.39855
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Graphs: Include a bar graph of these results.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggplot2)}
+
+\NormalTok{cleanup =}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.grid.major =} \KeywordTok{element_blank}\NormalTok{(), }
+                \DataTypeTok{panel.grid.minor =} \KeywordTok{element_blank}\NormalTok{(), }
+                \DataTypeTok{panel.background =} \KeywordTok{element_blank}\NormalTok{(), }
+                \DataTypeTok{axis.line.x =} \KeywordTok{element_line}\NormalTok{(}\DataTypeTok{color =} \StringTok{"black"}\NormalTok{),}
+                \DataTypeTok{axis.line.y =} \KeywordTok{element_line}\NormalTok{(}\DataTypeTok{color =} \StringTok{"black"}\NormalTok{),}
+                \DataTypeTok{legend.key =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{),}
+                \DataTypeTok{text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{15}\NormalTok{))}
+
+\NormalTok{bargraph =}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(df, }\KeywordTok{aes}\NormalTok{(PAL_cell, gender))}
+
+\NormalTok{bargraph }\OperatorTok{+}
+\StringTok{  }\NormalTok{cleanup }\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_summary}\NormalTok{(}\DataTypeTok{fun =}\NormalTok{ mean, }
+               \DataTypeTok{geom =} \StringTok{"bar"}\NormalTok{, }
+               \DataTypeTok{fill =} \StringTok{"White"}\NormalTok{, }
+               \DataTypeTok{color =} \StringTok{"Black"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_summary}\NormalTok{(}\DataTypeTok{fun.data =}\NormalTok{ mean_cl_normal, }
+               \DataTypeTok{geom =} \StringTok{"errorbar"}\NormalTok{, }
+               \DataTypeTok{width =} \FloatTok{.2}\NormalTok{, }
+               \DataTypeTok{position =} \StringTok{"dodge"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Average physical activity values for the cell phone accelerometer"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Gender"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{09_lab_files/figure-latex/graph1-1.pdf}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Write up: include an APA style results section for this analysis (just
+  the t-test not all the data screening).
+\end{enumerate}
+
+On average, males participated in PAL cell (M = 74.21, SD = 7.17) than
+females (M = 56.81, SD = 7.34). This difference was significant t(192) =
+-16.705, p \textless{} 2.2e-16 and it represented a large-sized effect d
+= -2.39855.
+
+\hypertarget{dependent-t-test}{%
+\section{Dependent t-test:}\label{dependent-t-test}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  Run a dependent t-test to tell if there are differences in the cell
+  phone and hand held accelerometer results.
+
+  \begin{enumerate}
+  \def\labelenumii{\alph{enumii}.}
+  \tightlist
+  \item
+    Include means and sds for your groups.
+  \item
+    Is there a significant difference in the ratings?
+  \end{enumerate}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#a.}
+
+\KeywordTok{summary}\NormalTok{(df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     gender       PAL_cell        PAL_acc     
+##  female:100   Min.   :38.32   Min.   :23.68  
+##  male  :100   1st Qu.:56.18   1st Qu.:52.10  
+##               Median :64.79   Median :63.33  
+##               Mean   :65.60   Mean   :62.05  
+##               3rd Qu.:74.11   3rd Qu.:70.31  
+##               Max.   :90.21   Max.   :93.61  
+##               NA's   :6       NA's   :6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Since df has 6 NA values for PAL_cell and PAL_acc, we cannot do dependent t-test}
+
+\CommentTok{#Checking for dataframe "replace" at it has deleted missing values}
+
+\KeywordTok{table}\NormalTok{(replace}\OperatorTok{$}\NormalTok{gender)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## female   male 
+##     92     96
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(replace)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   gender PAL_cell  PAL_acc
+## 1   male 72.40066 85.13709
+## 2   male 76.20630 74.69591
+## 3   male 73.98942 66.78421
+## 4   male 70.86654 65.42329
+## 5   male 54.85979 67.45573
+## 6   male 77.94282 83.29492
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#However, since it has uneven observations for gender in 'replace', I created another data frame with equal observations for the factor variable 'gender' by tweaking it (deleteing first 4 observations with  factor value 'male')}
+
+\NormalTok{replace1 =}\StringTok{ }\NormalTok{replace[}\DecValTok{5}\OperatorTok{:}\DecValTok{188}\NormalTok{,]}
+
+\KeywordTok{summary}\NormalTok{(replace1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     gender      PAL_cell        PAL_acc     
+##  female:92   Min.   :38.32   Min.   :23.68  
+##  male  :92   1st Qu.:56.17   1st Qu.:51.84  
+##              Median :64.37   Median :63.08  
+##              Mean   :65.51   Mean   :61.65  
+##              3rd Qu.:74.26   3rd Qu.:70.23  
+##              Max.   :90.21   Max.   :93.61
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{t.test}\NormalTok{(PAL_cell }\OperatorTok{~}\StringTok{ }\NormalTok{gender, }\DataTypeTok{data =}\NormalTok{ replace1, }\DataTypeTok{var.equal =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{paired =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Paired t-test
+## 
+## data:  PAL_cell by gender
+## t = -15.737, df = 91, p-value < 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -19.87044 -15.41644
+## sample estimates:
+## mean of the differences 
+##               -17.64344
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{t.test}\NormalTok{(PAL_acc }\OperatorTok{~}\StringTok{ }\NormalTok{gender, }\DataTypeTok{data =}\NormalTok{ replace1, }\DataTypeTok{var.equal =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{paired =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Paired t-test
+## 
+## data:  PAL_acc by gender
+## t = -13.419, df = 91, p-value < 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -19.90703 -14.77339
+## sample estimates:
+## mean of the differences 
+##               -17.34021
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Mean, SD and Length for PAL_cell}
+
+\NormalTok{MD_cell =}\StringTok{ }\KeywordTok{tapply}\NormalTok{(replace1}\OperatorTok{$}\NormalTok{PAL_cell, replace1}\OperatorTok{$}\NormalTok{gender, mean, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{stdevD_cell =}\StringTok{ }\KeywordTok{tapply}\NormalTok{(replace1}\OperatorTok{$}\NormalTok{PAL_cell, replace1}\OperatorTok{$}\NormalTok{gender, sd, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{ND_cell =}\StringTok{ }\KeywordTok{tapply}\NormalTok{(replace1}\OperatorTok{$}\NormalTok{PAL_cell, replace1}\OperatorTok{$}\NormalTok{gender, length)}
+
+\NormalTok{MD_cell;stdevD_cell;ND_cell}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   female     male 
+## 56.68926 74.33270
+\end{verbatim}
+
+\begin{verbatim}
+##   female     male 
+## 7.284746 7.344472
+\end{verbatim}
+
+\begin{verbatim}
+## female   male 
+##     92     92
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Mean, SD and Length for PAL_acc (hand held accelerometer results)}
+
+\NormalTok{MD_acc =}\StringTok{ }\KeywordTok{tapply}\NormalTok{(replace1}\OperatorTok{$}\NormalTok{PAL_acc, replace1}\OperatorTok{$}\NormalTok{gender, mean, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{stdevD_acc =}\StringTok{ }\KeywordTok{tapply}\NormalTok{(replace1}\OperatorTok{$}\NormalTok{PAL_acc, replace1}\OperatorTok{$}\NormalTok{gender, sd, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{ND_acc =}\StringTok{ }\KeywordTok{tapply}\NormalTok{(replace1}\OperatorTok{$}\NormalTok{PAL_acc, replace1}\OperatorTok{$}\NormalTok{gender, length)}
+
+\NormalTok{MD_acc;stdevD_acc;ND_acc}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   female     male 
+## 52.98175 70.32196
+\end{verbatim}
+
+\begin{verbatim}
+##    female      male 
+## 10.249001  8.105607
+\end{verbatim}
+
+\begin{verbatim}
+## female   male 
+##     92     92
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#b.}
+
+\CommentTok{#For both the t-test for cell phone and hand held accelerometer results, since the p-value (< 2.2e-16) is less than 0.05, we will reject the null hypothesis, implying that our alternate hypothesis is correct. Our data is significant, the true difference in means is not equal to 0 and there is a significant difference in the ratings.}
+
+\CommentTok{#The t-value for both the t-tests are different at -15.737 and -13.419 for cell phone and hand held accelerometer results respectively.}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{6}
+\tightlist
+\item
+  Effect size: What is the effect size for this difference? Be sure to
+  list which effect size you are using.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Calculating an effect size}
+
+\CommentTok{#For PAL_cell}
+
+\NormalTok{effect2_cell =}\StringTok{ }\KeywordTok{d.dep.t.avg}\NormalTok{(}\DataTypeTok{m1 =}\NormalTok{ MD_cell[}\DecValTok{1}\NormalTok{], }\DataTypeTok{m2 =}\NormalTok{ MD_cell[}\DecValTok{2}\NormalTok{], }
+\DataTypeTok{sd1 =}\NormalTok{ stdevD_cell[}\DecValTok{1}\NormalTok{], }\DataTypeTok{sd2 =}\NormalTok{ stdevD_cell[}\DecValTok{2}\NormalTok{],  }
+\DataTypeTok{n =}\NormalTok{ ND_cell[}\DecValTok{1}\NormalTok{], }\DataTypeTok{a =} \FloatTok{.05}\NormalTok{)}
+\NormalTok{effect2_cell}\OperatorTok{$}\NormalTok{d}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    female 
+## -2.412083
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#For PAL_acc}
+
+\NormalTok{effect2_acc =}\StringTok{ }\KeywordTok{d.dep.t.avg}\NormalTok{(}\DataTypeTok{m1 =}\NormalTok{ MD_acc[}\DecValTok{1}\NormalTok{], }\DataTypeTok{m2 =}\NormalTok{ MD_acc[}\DecValTok{2}\NormalTok{], }
+\DataTypeTok{sd1 =}\NormalTok{ stdevD_acc[}\DecValTok{1}\NormalTok{], }\DataTypeTok{sd2 =}\NormalTok{ stdevD_acc[}\DecValTok{2}\NormalTok{],  }
+\DataTypeTok{n =}\NormalTok{ ND_acc[}\DecValTok{1}\NormalTok{], }\DataTypeTok{a =} \FloatTok{.05}\NormalTok{)}
+\NormalTok{effect2_acc}\OperatorTok{$}\NormalTok{d}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    female 
+## -1.889467
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Creating difference scores, calculating the difference score measures.}
+
+\KeywordTok{table}\NormalTok{(replace1}\OperatorTok{$}\NormalTok{gender)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## female   male 
+##     92     92
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{female =}\StringTok{ }\KeywordTok{subset}\NormalTok{(replace1, gender }\OperatorTok{==}\StringTok{ "female"}\NormalTok{)}
+\NormalTok{male =}\StringTok{ }\KeywordTok{subset}\NormalTok{(replace1, gender }\OperatorTok{==}\StringTok{ "male"}\NormalTok{)}
+
+\CommentTok{#For PAL_cell}
+
+\NormalTok{diff_cell =}\StringTok{ }\NormalTok{female}\OperatorTok{$}\NormalTok{PAL_cell }\OperatorTok{-}\StringTok{ }\NormalTok{male}\OperatorTok{$}\NormalTok{PAL_cell}
+\NormalTok{mdiff_cell =}\StringTok{ }\KeywordTok{mean}\NormalTok{(diff_cell, }\DataTypeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{sddiff_cell =}\StringTok{ }\KeywordTok{sd}\NormalTok{(diff_cell, }\DataTypeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{N2_cell =}\StringTok{ }\KeywordTok{length}\NormalTok{(diff_cell)}
+
+\NormalTok{mdiff_cell; sddiff_cell; N2_cell}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -17.64344
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 10.75356
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 92
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{effect2}\FloatTok{.1}\NormalTok{_cell =}\StringTok{ }\KeywordTok{d.dep.t.diff}\NormalTok{(}\DataTypeTok{mdiff =}\NormalTok{ mdiff_cell, }\DataTypeTok{sddiff =}\NormalTok{ sddiff_cell,}
+                         \DataTypeTok{n =}\NormalTok{ N2_cell, }\DataTypeTok{a =} \FloatTok{.05}\NormalTok{)}
+
+\NormalTok{effect2}\FloatTok{.1}\NormalTok{_cell}\OperatorTok{$}\NormalTok{d}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -1.640707
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#For PAL_acc}
+
+\NormalTok{diff_acc =}\StringTok{ }\NormalTok{female}\OperatorTok{$}\NormalTok{PAL_acc }\OperatorTok{-}\StringTok{ }\NormalTok{male}\OperatorTok{$}\NormalTok{PAL_acc}
+\NormalTok{mdiff_acc =}\StringTok{ }\KeywordTok{mean}\NormalTok{(diff_acc, }\DataTypeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{sddiff_acc =}\StringTok{ }\KeywordTok{sd}\NormalTok{(diff_acc, }\DataTypeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{N2_acc =}\StringTok{ }\KeywordTok{length}\NormalTok{(diff_acc)}
+
+\NormalTok{mdiff_acc; sddiff_acc; N2_acc}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -17.34021
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 12.39447
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 92
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{effect2}\FloatTok{.1}\NormalTok{_acc =}\StringTok{ }\KeywordTok{d.dep.t.diff}\NormalTok{(}\DataTypeTok{mdiff =}\NormalTok{ mdiff_acc, }\DataTypeTok{sddiff =}\NormalTok{ sddiff_acc,}
+                         \DataTypeTok{n =}\NormalTok{ N2_acc, }\DataTypeTok{a =} \FloatTok{.05}\NormalTok{)}
+
+\NormalTok{effect2}\FloatTok{.1}\NormalTok{_acc}\OperatorTok{$}\NormalTok{d}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -1.399028
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{7}
+\tightlist
+\item
+  Power: Determine the number of participants you should have used in
+  this experiment given the effect size you found above.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Power for PAL_cell}
+
+\KeywordTok{pwr.t.test}\NormalTok{(}\DataTypeTok{n =} \OtherTok{NULL}\NormalTok{, }\DataTypeTok{d =}\NormalTok{ effect2_cell}\OperatorTok{$}\NormalTok{d, }\DataTypeTok{sig.level =} \FloatTok{.05}\NormalTok{,}
+           \DataTypeTok{power =} \FloatTok{.80}\NormalTok{, }\DataTypeTok{type =} \StringTok{"paired"}\NormalTok{, }\DataTypeTok{alternative =} \StringTok{"two.sided"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##      Paired t test power calculation 
+## 
+##               n = 3.625524
+##               d = 2.412083
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number of *pairs*
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Power for PAL_acc}
+
+\KeywordTok{pwr.t.test}\NormalTok{(}\DataTypeTok{n =} \OtherTok{NULL}\NormalTok{, }\DataTypeTok{d =}\NormalTok{ effect2_acc}\OperatorTok{$}\NormalTok{d, }\DataTypeTok{sig.level =} \FloatTok{.05}\NormalTok{,}
+           \DataTypeTok{power =} \FloatTok{.80}\NormalTok{, }\DataTypeTok{type =} \StringTok{"paired"}\NormalTok{, }\DataTypeTok{alternative =} \StringTok{"two.sided"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##      Paired t test power calculation 
+## 
+##               n = 4.44776
+##               d = 1.889467
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number of *pairs*
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{8}
+\tightlist
+\item
+  Graphs: Include a bar graph of these results.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bargraph_cell =}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(replace1, }\KeywordTok{aes}\NormalTok{(PAL_cell, gender))}
+\NormalTok{bargraph_acc =}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(replace1, }\KeywordTok{aes}\NormalTok{(PAL_acc, gender))}
+
+\CommentTok{#Bar graph for PAL_cell}
+
+\NormalTok{bargraph_cell }\OperatorTok{+}
+\StringTok{  }\NormalTok{cleanup }\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_summary}\NormalTok{(}\DataTypeTok{fun =}\NormalTok{ mean, }
+               \DataTypeTok{geom =} \StringTok{"bar"}\NormalTok{, }
+               \DataTypeTok{fill =} \StringTok{"White"}\NormalTok{, }
+               \DataTypeTok{color =} \StringTok{"Black"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_summary}\NormalTok{(}\DataTypeTok{fun.data =}\NormalTok{ mean_cl_normal, }
+               \DataTypeTok{geom =} \StringTok{"errorbar"}\NormalTok{, }
+               \DataTypeTok{width =} \FloatTok{.2}\NormalTok{, }
+               \DataTypeTok{position =} \StringTok{"dodge"}\NormalTok{) }\OperatorTok{+}
+\StringTok{   }\KeywordTok{xlab}\NormalTok{(}\StringTok{"PAL_cell"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Gender"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{09_lab_files/figure-latex/graph2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Bar Graph for PAL_acc}
+
+\NormalTok{bargraph_acc }\OperatorTok{+}
+\StringTok{  }\NormalTok{cleanup }\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_summary}\NormalTok{(}\DataTypeTok{fun =}\NormalTok{ mean, }
+               \DataTypeTok{geom =} \StringTok{"bar"}\NormalTok{, }
+               \DataTypeTok{fill =} \StringTok{"White"}\NormalTok{, }
+               \DataTypeTok{color =} \StringTok{"Black"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_summary}\NormalTok{(}\DataTypeTok{fun.data =}\NormalTok{ mean_cl_normal, }
+               \DataTypeTok{geom =} \StringTok{"errorbar"}\NormalTok{, }
+               \DataTypeTok{width =} \FloatTok{.2}\NormalTok{, }
+               \DataTypeTok{position =} \StringTok{"dodge"}\NormalTok{) }\OperatorTok{+}
+\StringTok{   }\KeywordTok{xlab}\NormalTok{(}\StringTok{"PAL_acc"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Gender"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{09_lab_files/figure-latex/graph2-2.pdf}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{9}
+\tightlist
+\item
+  Write up: include an APA style results section for this analysis (just
+  the t-test not all the data screening).
+\end{enumerate}
+
+For the t-test for PAL\_cell, on average, males participated in PAL cell
+(M = 74.33, SD = 7.34) than females (M = 56.69, SD = 7.28). This
+difference was significant t(91) = -15.737, p \textless{} 2.2e-16 and it
+represented a large-sized effect d = 2.412083.
+
+For the t-test for PAL\_acc, on average, males participated in PAL cell
+(M = 74.21, SD = 7.17) than females (M = 56.81, SD = 7.34). This
+difference was significant t(91) = -13.419, p \textless{} 2.2e-16 and it
+represented a large-sized effect d = 1.889467.
+
+\hypertarget{theory}{%
+\section{Theory:}\label{theory}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{10}
+\tightlist
+\item
+  List the null hypothesis for the dependent t-test.
+\end{enumerate}
+
+There is no significant differences in the cell phone (PAL\_cell) and
+hand held accelerometer (PAL\_acc) results.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{11}
+\tightlist
+\item
+  List the research hypothesis for the dependent t-test.
+\end{enumerate}
+
+There is a significant difference in the cell phone (PAL\_cell) and hand
+held accelerometer (PAL\_acc) results.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{12}
+\tightlist
+\item
+  If the null were true, what would we expect the mean difference score
+  to be?
+\end{enumerate}
+
+If the null were true, we would expect the mean difference score to be 0
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{13}
+\tightlist
+\item
+  If the null were false, what would we expect the mean difference score
+  to be?
+\end{enumerate}
+
+If the null were false, we would expect the mean difference score to be
+at least 0.30
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{14}
+\tightlist
+\item
+  In our formula for dependent t, what is the estimation of systematic
+  variance?
+\end{enumerate}
+
+The variance for PAL\_cell is 53.06752 and 53.94126 for females and
+males respectively.
+
+The variance for PAL\_acc is 105.04203 and 65.70087 for females and
+males respectively.
+
+These are the variance created by our manipulation, hence they are an
+estimation systematic variance.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{15}
+\tightlist
+\item
+  In our formula for dependent t, what is the estimation of unsystematic
+  variance?
+\end{enumerate}
+
+Variance created by unknown factors are used to find unsystematic
+variance. SInce we are unaware of any unknown factors, we are unable to
+find an estimation of unsystematic variance.
+
+\end{document}

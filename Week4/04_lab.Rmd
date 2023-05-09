@@ -1,0 +1,367 @@
+---
+title: "Introduction to Data Analytics 2"
+author: "Karmanya Pathak"
+date: '`r Sys.Date()`'
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Part 1: Experiment Design
+
+*Title*: Consumer Pseudo-Showrooming and Omni-Channel Product Placement Strategies
+
+*Abstract*: Recent advances in information technologies (IT) have powered the merger of online and offline retail channels into one single platform. Modern consumers frequently switch between online and offline channels when they navigate through various stages of the decision journey, motivating multichannel sellers to develop omni-channel strategies that optimize their overall profit. This study examines consumers' cross-channel search behavior of "pseudo-showrooming," or the consumer behavior of inspecting one product at a seller's physical store before buying a related but different product at the same seller’s online store, and investigates how such consumer behavior allows a multichannel seller to achieve better coordination between its online and offline arms through optimal product placement strategies.
+
+Participants in the study were grouped into the following categories: 
+
+  - Where_bought: Where they ended up purchasing an item: bought at the store, bought online. 
+  - Who_bought: If they bought from the same or a different retailer. 
+
+Each participant was then measured on:
+
+  - Money: how much money they spent in dollars on the product.
+  - Time: how much time (in minutes) they spent looking at the product online. 
+
+1)	What would be one possible null hypothesis based on this study?
+
+One possible null hypothesis based on this theory caould be that the consumer bought in-store from the same retailer, spending more money but spending less time
+
+
+2)	What would be one possible alternative hypothesis based on this study?
+
+One possible alternate hypothesis based on this study could be that the consumer bought online from a different retailer, spending less money but spending more time
+
+3)	Who are they sampling in this study?
+
+We are sampling consumers in this study
+
+
+4)	Who is the intended population in this study?
+
+Users of both online and offline retail channels, i.e. modern consumers are the intended population in this study
+
+5)	Give an example of type 1 error based on this study (do not just define, explain in context how it might have happened here).
+
+Type 1 error - False positive (falsely rejecting null hypothesis)
+
+One example of type 1 error is that we predicted the consumer to buy online, but he or she bought it offline. One such scenario might be in-store discount sales that we did not consider in our model.
+
+
+6)	Give an example of type 2 error based on this study (do not just define, explain in context how it might have happened here).
+
+Type 2 error - false negative
+
+One example of type 2 error is that we predicted the consumer to buy offline, but bought it online. One such scenario might be someone finding Cyber sales online increasing online sales.
+
+
+# Part 2: Use the 04_data.csv to complete this portion.
+
+```{r import-data}
+df1 <- read.csv("C:\\Users\\Karmanya\\Desktop\\Harrisburg\\Lectures\\Spring 2020\\ANLY 500 - Principles of Analytics I\\Assignment 3\\04_data.csv")
+unique(df1$where_bought)
+unique(df1$who_bought)
+```
+
+1)	For each IV list the levels (next to a, b):
+
+    a.	Where bought: online, store
+
+    b.	Who bought: different, same
+    
+2)	What are the conditions in this experiment?
+
+The conditions in this experiment are:
+
+i. Bought online from a different store
+ii. Bought online from the same store
+iii. in-store from a different store
+iv. in-store from the same store
+
+3)	For each condition list the means, standard deviations, and standard error for the conditions for time and money spent. Please note that means you should have several sets of M, SD, and SE. Be sure you name the sets of means, sd, and se different things so you can use them later.
+
+```{r descriptives}
+#Mean
+
+#i. Bought Online, from a different store's website (Online different store - ODS)
+ods_money_mean <- mean(subset(df1$money,df1$where_bought=="online" & df1$who_bought=="different"))
+ods_time_mean <- mean(subset(df1$time,df1$where_bought=="online" & df1$who_bought=="different"))
+
+#ii. Bought Online, from the same store's website (Online same store - OSS)
+oss_money_mean <- mean(subset(df1$money,df1$where_bought=="online" & df1$who_bought=="same"))
+oss_time_mean <- mean(subset(df1$time,df1$where_bought=="online" & df1$who_bought=="same"))
+
+#iii. Bought in-store(offline center) from a different store (In-store different store - ids)
+ids_money_mean <- mean(subset(df1$money,df1$where_bought=="store" & df1$who_bought=="different"))
+ids_time_mean <- mean(subset(df1$time,df1$where_bought=="store" & df1$who_bought=="different"))
+
+#iv. Bought in-store(offline center) from the same store (In-store same store - iss)
+iss_money_mean <- mean(subset(df1$money,df1$where_bought=="store" & df1$who_bought=="same"))
+iss_time_mean <- mean(subset(df1$time,df1$where_bought=="store" & df1$who_bought=="same"))
+
+
+#Standard Deviation
+
+#i. Bought Online, from a different store's website (Online different store - ODS)
+ods_money_sd <- sd(subset(df1$money,df1$where_bought=="online" & df1$who_bought=="different"))
+ods_time_sd <- sd(subset(df1$time,df1$where_bought=="online" & df1$who_bought=="different"))
+
+#ii. Bought Online, from the same store's website (Online same store - OSS)
+oss_money_sd <- sd(subset(df1$money,df1$where_bought=="online" & df1$who_bought=="same"))
+oss_time_sd <- sd(subset(df1$time,df1$where_bought=="online" & df1$who_bought=="same"))
+
+#iii. Bought in-store(offline center) from a different store (In-store different store - ids)
+ids_money_sd <- sd(subset(df1$money,df1$where_bought=="store" & df1$who_bought=="different"))
+ids_time_sd <- sd(subset(df1$time,df1$where_bought=="store" & df1$who_bought=="different"))
+
+#iv. Bought in-store(offline center) from the same store (In-store same store - iss)
+iss_money_sd <- sd(subset(df1$money,df1$where_bought=="store" & df1$who_bought=="same"))
+iss_time_sd <- sd(subset(df1$time,df1$where_bought=="store" & df1$who_bought=="same"))
+
+
+#Standard Error
+
+#i. Bought Online, from a different store's website (Online different store - ODS)
+ods_money_se <- ods_money_sd/sqrt(length(subset(df1$money,df1$where_bought=="online" & df1$who_bought=="different")))
+ods_time_se <- ods_time_sd/sqrt(length(subset(df1$time,df1$where_bought=="online" & df1$who_bought=="different")))
+
+#ii. Bought Online, from the same store's website (Online same store - OSS)
+oss_money_se <- oss_money_sd/sqrt(length(subset(df1$money,df1$where_bought=="online" & df1$who_bought=="same")))
+oss_time_se <- oss_time_sd/sqrt(length(subset(df1$time,df1$where_bought=="online" & df1$who_bought=="same")))
+
+#iii. Bought in-store(offline center) from a different store (In-store different store - ids)
+ids_money_se <- ids_money_sd/sqrt(length(subset(df1$money,df1$where_bought=="store" & df1$who_bought=="different")))
+ids_time_se <- ids_time_sd/sqrt(length(subset(df1$time,df1$where_bought=="store" & df1$who_bought=="different")))
+
+#iv. Bought in-store(offline center) from the same store (In-store same store - iss)
+iss_money_se <- iss_money_sd/sqrt(length(subset(df1$money,df1$where_bought=="store" & df1$who_bought=="same")))
+iss_time_se <- iss_time_sd/sqrt(length(subset(df1$time,df1$where_bought=="store" & df1$who_bought=="same")))
+
+
+
+#Q.4 Which condition appears to have the best model fit using the mean as the model (i.e. smallest error) for time?
+
+#i. Bought Online, from a different store's website (Online different store - ODS)
+ods_data <- subset(df1,df1$where_bought=="online" & df1$who_bought=="different")
+ods_data_tapply <- tapply(ods_data$time,ods_data$where_bought,mean)
+print(ods_data_tapply)
+
+
+#ii. Bought Online, from the same store's website (Online same store - OSS)
+oss_data <- subset(df1,df1$where_bought=="online" & df1$who_bought=="same")
+oss_data_tapply <- tapply(oss_data$time,oss_data$where_bought,mean)
+print(oss_data_tapply)
+
+
+#iii. Bought in-store(offline center) from a different store (In-store different store - ids)
+ids_data <- subset(df1, df1$where_bought=="store" & df1$who_bought=="different")
+ids_data_tapply <- tapply(ids_data$time,ids_data$where_bought,mean)
+print(ids_data_tapply)
+
+
+#iv. Bought in-store(offline center) from the same store (In-store same store - iss)
+iss_data <- subset(df1,df1$where_bought=="store" & df1$who_bought=="same")
+iss_data_tapply <- tapply(iss_data$time,iss_data$where_bought,mean)
+print(iss_data_tapply)
+
+
+
+
+```
+
+4)	Which condition appears to have the best model fit using the mean as the model (i.e. smallest error) for time?
+
+Bought Online, from a different store's website (scenario 1 from the conditions above: 10.04745)
+
+5)	What are the df for each condition?
+
+```{r df}
+
+#Degrees f Freedom for each condition:
+
+#i. Bought Online, from a different store's website (Online different store - ODS)
+
+ods_data <- subset(df1,df1$where_bought=="online" & df1$who_bought=="different")
+ods_df <- cbind(ods_data$where_bought,ods_data$who_bought,ods_data$money,ods_data$time)
+ods_df <- ods_df[complete.cases(ods_df),]
+ods_X <- ods_df[,-3]
+ods_Y <- ods_df[,3]
+ods_fit <- lm.fit(ods_X,ods_Y)
+df.residual(ods_fit)
+
+#ii. Bought Online, from the same store's website (Online same store - OSS)
+oss_data <- subset(df1,df1$where_bought=="online" & df1$who_bought=="same")
+oss_df <- cbind(oss_data$where_bought, oss_data$who_bought, oss_data$money, oss_data$time)
+oss_df <- oss_df[complete.cases(oss_df),]
+oss_X <- oss_df[,-3]
+oss_Y <- oss_df[,3]
+oss_fit <- lm.fit(oss_X,oss_Y)
+df.residual((oss_fit))
+
+#iii. Bought in-store(offline center) from a different store (In-store different store - ids)
+ids_data <- subset(df1,df1$where_bought=="store" & df1$who_bought=="different")
+ids_df <- cbind(ids_data$where_bought, ids_data$who_bought, ids_data$money, ids_data$time)
+ids_df <- ids_df[complete.cases(ids_df),]
+ids_X <- ids_df[,-3]
+ids_Y <- ids_df[,3]
+ids_fit <- lm.fit(ids_X,ids_Y)
+df.residual(ids_fit)
+
+
+#iv. Bought in-store(offline center) from the same store (In-store same store - iss)
+iss_data <- subset(df1,df1$where_bought=="store" & df1$who_bought=="same")
+iss_df <- cbind(iss_data$where_bought, iss_data$who_bought, iss_data$money, iss_data$time)
+iss_df <- iss_df[complete.cases(iss_df),]
+iss_X <- iss_df[,-3]
+iss_Y <- iss_df[,3]
+iss_fit <- lm.fit(iss_X,iss_Y)
+df.residual((iss_fit))
+
+
+```
+
+6)	What is the confidence interval (95%) for the means?
+
+```{r conf-interval}
+
+#Confidence Interval:
+
+#For the whole dataset:
+
+##money
+money_mean <- mean(df1$money)
+money_sd <- sd(df1$money)
+money_error <- qnorm(0.975)*money_sd/sqrt(200)
+money_left <- money_mean - money_error
+money_right <- money_mean + money_error
+money_left
+money_right
+
+##time
+time_mean <- mean(df1$time)
+time_sd <- sd(df1$time)
+time_error <- qnorm(0.975)*time_sd/sqrt(200)
+time_left <- time_mean - time_error
+time_right <- time_mean + time_error
+time_left
+time_right
+
+
+#For the 4 conditions:
+
+#money
+
+#i. Bought Online, from a different store's website (Online different store - ODS)
+ods_money_mean
+ods_money_sd
+ods_money_error <- qnorm(0.975)*ods_money_sd/sqrt(50)
+ods_money_left <- ods_money_mean - ods_money_error
+ods_money_right <- ods_money_mean + ods_money_error
+ods_money_left
+ods_money_right
+
+#ii. Bought Online, from the same store's website (Online same store - OSS)
+oss_money_mean
+oss_money_sd
+oss_money_error <- qnorm(0.975)*oss_money_sd/sqrt(50)
+oss_money_left <- oss_money_mean - oss_money_error
+oss_money_right <- oss_money_mean + oss_money_error
+oss_money_left
+oss_money_right
+
+#iii. Bought in-store(offline center) from a different store (In-store different store - ids)
+ids_money_mean 
+ids_money_sd
+ids_money_error <- qnorm(0.975)*ids_money_sd/sqrt(50)
+ids_money_left <- ids_money_mean - ids_money_error
+ids_money_right <- ids_money_mean + ids_money_error
+ids_money_left
+ids_money_right
+
+#iv. Bought in-store(offline center) from the same store (In-store same store - iss)
+iss_money_mean 
+iss_money_sd
+iss_money_error <- qnorm(0.975)*iss_money_sd/sqrt(50)
+iss_money_left <- iss_money_mean - iss_money_error
+iss_money_right <- iss_money_mean + iss_money_error
+iss_money_left
+iss_money_right
+
+#time
+
+#i. Bought Online, from a different store's website (Online different store - ODS)
+ods_time_mean 
+ods_time_sd
+ods_time_error <- qnorm(0.975)*ods_time_sd/sqrt(50)
+ods_time_left <- ods_time_mean - ods_time_error
+ods_time_right <- ods_time_mean + ods_time_error
+ods_time_left
+ods_time_right
+
+#ii. Bought Online, from the same store's website (Online same store - OSS)
+oss_time_mean 
+oss_time_sd
+oss_time_error <- qnorm(0.975)*oss_time_sd/sqrt(50)
+oss_time_left <- oss_time_mean - oss_time_error
+oss_time_right <- oss_time_mean + oss_time_error
+oss_time_left
+oss_time_right
+
+#iii. Bought in-store(offline center) from a different store (In-store different store - ids)
+ids_time_mean 
+ids_time_sd
+ids_time_error <- qnorm(0.975)*ids_time_sd/sqrt(50)
+ids_time_left <- ids_time_mean - ids_time_error
+ids_time_right <- ids_time_mean + ids_time_error
+ids_time_left
+ids_time_right
+
+#iv. Bought in-store(offline center) from the same store (In-store same store - iss)
+iss_time_mean
+iss_time_sd
+iss_time_error <- qnorm(0.975)*iss_time_sd/sqrt(50)
+iss_time_left <- iss_time_mean - iss_time_error
+iss_time_right <- iss_time_mean + iss_time_error
+iss_time_left
+iss_time_right
+
+
+```
+
+7)	Use the MOTE library to calculate the effect size for the difference between money spent for the following comparisons (that means you'll have to do this twice):
+
+```{r MOTE}
+
+##Store versus online when bought at the same retailer
+MOTE::d.dep.t.avg(oss_money_mean,iss_money_mean,oss_money_sd, iss_money_sd,50,0.05)
+
+##Store versus online when bought at a different retailer
+MOTE::d.dep.t.avg(ods_money_mean,ids_money_mean,ods_money_sd, ids_money_sd,50,0.05)
+
+```
+
+8)	What can you determine about the effect size in the experiment - is it small, medium or large?
+
+The effect size in the two experiments above are -3.252424 and -3.183181 which appear to be medium due to the lying in the middle of the confidence interval of the d value.
+
+
+9)	How many people did we need in the study for each comparison?
+
+```{r pwr}
+library("pwr")
+
+##Store versus online when bought at the same retailer
+
+pwr.t.test(n=50,d=-3.252424)
+
+##Store versus online when bought at a different retailer
+
+pwr.t.test(n=50,d=-3.183181)
+
+## We needed 50 people in the study for each comparison.
+
+```

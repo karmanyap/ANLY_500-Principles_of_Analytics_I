@@ -1,0 +1,588 @@
+---
+title: "t-Tests"
+author: "Karmanya Pathak"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*Title*: Estimation of physical activity levels using cell phone questionnaires: A comparison with accelerometry for evaluation of between-subject and within-subject variations
+
+*Abstract*: Physical activity promotes health and longevity. From a business perspective, healthier employees are more likely to report to work, miss less days, and cost less for health insurance. Your business wants to encourage healthy livestyles in a cheap and affordable way through health care incentive programs. The use of telecommunication technologies such as cell phones is highly interesting in this respect. In an earlier report, we showed that physical activity level (PAL) assessed using a cell phone procedure agreed well with corresponding estimates obtained using the doubly labeled water method. However, our earlier study indicated high within-subject variation in relation to between-subject variations in PAL using cell phones, but we could not assess if this was a true variation of PAL or an artifact of the cell phone technique. Objective: Our objective was to compare within- and between-subject variations in PAL by means of cell phones with corresponding estimates using an accelerometer. In addition, we compared the agreement of daily PAL values obtained using the cell phone questionnaire with corresponding data obtained using an accelerometer. 
+
+# Dataset: 
+
+    -	Gender: male and female subjects were examined in this experiment.
+    -   PAL_cell: average physical activity values for the cell phone accelerometer (range 0-100).
+    -	PAL_acc: average physical activity values for the hand held accelerometer (range 0-100).
+
+APA write ups should include means, standard deviation/error, t-values, p-values, effect size, and a brief description of what happened in plain English.
+
+```{r starting}
+
+dfdata <- read.csv("D:/Harrisburg/Lectures/Spring 2020/ANLY 500 - Principles of Analytics I/Assignment 9/09_data.csv")
+
+df <- dfdata
+
+
+```
+
+# Data screening:
+
+## Accuracy:
+    a)	Include output and indicate how the data are not accurate.
+    b)	Include output to show how you fixed the accuracy errors, and describe what you did.
+    
+```{r accuracy}
+
+#a
+
+summary(df)
+
+#b
+
+#i.
+"The gender variable does not have any errors in factoring the variables into the two levels: male and female."
+
+"PAL_cell observations are within the range of 0-100 showing no accuracy errors"
+
+"PAL_acc observations are within the range of 0-100 showing no accuracy errors"
+
+"Since there were no errors, we will move on to the next step."
+
+```
+
+## Missing data:
+    a)	Include output that shows you have missing data.
+    b)	Include output and a description that shows what you did with the missing data.
+        
+```{r missing}
+
+#a.
+
+summary(df)
+
+#b.
+
+
+#Calculating percent missing by row/column
+
+percentmiss = function(x){sum(is.na(x))/length(x)*100}
+
+#Using apply to get percent missing by rows
+
+apply(df,1,percentmiss)
+
+#Using the table function
+
+missing = apply(df,1,percentmiss)
+table(missing)
+
+#Using the base R function subset() and a logical operator to remove the target data
+
+replace = subset(df, missing <= 5)
+missing1 = apply(replace,1,percentmiss)
+table(missing1)
+
+dont = subset(df, missing > 5)
+missing2 = apply(dont,1,percentmiss)
+table(missing2)
+
+
+#Using apply to get percent missing by columns and rows.
+
+apply(df,2,percentmiss)
+
+
+#Figuring out the columns to exclude
+
+replace_col = replace[,c(2,3)]
+dont_col = replace[,c(1)]
+
+replace_col
+dont_col
+
+#Loading the mice package
+
+library(mice)
+
+set.seed(123)
+
+#Setting a temporary placeholder variable name
+
+temp_no_miss = mice(replace_col)
+
+#Replacing the data back into the dataset can be done using the following
+
+no_miss = complete(temp_no_miss,1)
+
+summary(no_miss)
+#Put everything back together, We want to take our replaced data, and add back in our columns we could’t replace.
+
+all_col = cbind(dont_col, no_miss)
+
+names(all_col)[1] <- "gender"
+
+summary(all_col)
+
+#Adding back in our rows we couldn’t replace:
+
+all_rows = rbind(dont, all_col)
+summary(all_rows)
+
+
+```
+
+## Outliers:
+    a)	Include a summary of your mahal scores that are greater than the cutoff.
+    b)	What are the df for your Mahalanobis cutoff?
+    c)	What is the cut off score for your Mahalanobis measure?
+    d)	How many outliers did you have?
+    e)	Delete all outliers. 
+    
+```{r outliers}
+
+#a.
+
+str(no_miss)
+
+mahal = mahalanobis(no_miss,
+                    colMeans(no_miss, na.rm=TRUE),
+                    cov(no_miss, use ="pairwise.complete.obs")
+                    )
+mahal
+
+"Cut off score"
+
+cutoff = qchisq(1-.001,ncol(no_miss))
+print(cutoff)
+
+summary(mahal > cutoff)
+
+"There are 0 observations of mahal scores that are greater than the cutoff."
+
+#b.
+
+"The df of Mahalanobis cutoff is 187 (n -1)"
+
+#c.
+
+print(paste0("The cut off score for the Mahalanobis measure is ",cutoff))
+
+#d.
+
+"We got 0 outliers."
+
+
+#e.
+
+"Since there were no outliers, we did not delete any observations."
+
+```
+
+# Assumptions:
+
+## Additivity: 
+    a)  We won't need to calculate a correlation table. Why not?
+    
+    Finding correlation between variables and creating a correlation table will only be necessary if you have multiple continuous variables. Since we have only one factor variable and two numeric variables in the original dataset, we would not need to calculte a correlation table.
+    
+
+## Linearity: 
+    a)  Include a picture that shows how you might assess multivariate linearity.
+    b)  Do you think you've met the assumption for linearity?
+    
+```{r linearity}
+
+#a.
+
+random = rchisq(nrow(df), 200)
+
+#Fake regression
+
+fake = lm(random~., data = df)
+summary(fake)
+
+ standardized = rstudent(fake)
+qqnorm(standardized)
+abline(0,1)
+
+#b.
+
+"Since the plot follows a pretty normal path along the abline with an exception of a few curves towards the end of both ends within boundary to give us a good fit, we can assume that we have met the assumption for linearity. "
+
+
+
+```
+
+## Normality: 
+    a)  Include a picture that shows how you might assess multivariate normality.
+    b)  Do you think you've met the assumption for normality? 
+
+```{r normality}
+
+#a.
+
+library(moments)
+skewness(no_miss, na.rm=TRUE)
+
+kurtosis(no_miss, na.rm=TRUE)
+
+hist(standardized, breaks=15)
+
+#b.
+
+"The skewness and kurtosis values are less than the absoloute value of 3 and the histgram seems to have a fairly even or normal distribution and be centered around 0 leading us to assume for normality."
+
+
+```
+
+## Homogeneity/Homoscedasticity: 
+    a)  Include a picture that shows how you might assess multivariate homogeneity.
+    b)  Do you think you've met the assumption for homogeneity?
+    c)  Do you think you've met the assumption for homoscedasticity?
+
+```{r homog-s}
+
+#a.
+
+library(biotools)
+
+boxM(df[,-1], df[,1])
+
+#Fit values standardized:
+
+fitvalues = scale(fake$fitted.values)
+
+#Plotting the values:
+
+plot(fitvalues, standardized) 
+abline(0,0)
+abline(v = 0)
+
+#Alternatively:
+
+plot(fake,1)
+
+#b.
+
+"Since the spread above the line is similar to the spread below the 0, 0 line; we have met the assumption for Homogeneity."
+
+#c.
+
+"Since the spread is equal across the x axis; we have met the assumption for Homoscedasticity."
+
+```
+
+# Independent t-test:
+
+1)	Run an independent t-test to determine if there are differences in gender for the cell phone measurement of physical activity level.
+    a.	Use the equal variances option to adjust for problems with homogeneity (if necessary). 
+    b.	Include means and sds for your groups. 
+    c.	Is there a significant difference in the ratings? 
+    
+    
+```{r ind1}
+
+#a.
+
+t.test(PAL_cell ~ gender, data = df, var.equal = TRUE, paired = FALSE)
+
+#b.
+
+M = tapply(df$PAL_cell, df$gender, mean, na.rm = TRUE)
+stdev = tapply(df$PAL_cell, df$gender, sd, na.rm = TRUE)
+N = tapply(df$PAL_cell, df$gender, length)
+
+M;stdev;N
+
+#c.
+
+# Since the p-value (< 2.2e-16) is less than 0.05, we will reject the null hypothesis, implying that our alternate hypothesis is correct. Our data is significant, the true difference in means is not equal to 0 and there is a significant difference in the ratings.
+
+#Delete the comment below:
+
+#Interpret the results. Compare the P-value to the α significance level stated earlier. If it is less than α, reject the null hypothesis. If the result is greater than α, fail to reject the null hypothesis. If you reject the null hypothesis, this implies that your alternative hypothesis is correct, and that the data is significant. If you fail to reject the null hypothesis, this implies that there is no significant difference between the sample data and the given data.
+
+
+
+```
+
+2)	Effect size: What is the effect size for this difference? Be sure to list which effect size you are using. 
+
+```{r effect1}
+
+library(MOTE)
+effect = d.ind.t(m1 = M[1], m2 = M[2],        
+sd1 = stdev[1], sd2 = stdev[2],        
+n1 = N[1], n2 = N[2], a = .05)
+effect$d
+
+```
+
+3)	Power: Determine the number of participants you should have used in this experiment given the effect size you found above. 
+
+```{r power1}
+
+library(pwr)
+pwr.t.test(n = NULL, d = effect$d, 
+sig.level = .05,           
+power = .80, type = "two.sample", 
+alternative = "two.sided")
+
+```
+
+4)	Graphs: Include a bar graph of these results.
+
+```{r graph1}
+
+library(ggplot2)
+
+cleanup = theme(panel.grid.major = element_blank(), 
+                panel.grid.minor = element_blank(), 
+                panel.background = element_blank(), 
+                axis.line.x = element_line(color = "black"),
+                axis.line.y = element_line(color = "black"),
+                legend.key = element_rect(fill = "white"),
+                text = element_text(size = 15))
+
+bargraph = ggplot(df, aes(PAL_cell, gender))
+
+bargraph +
+  cleanup +
+  stat_summary(fun = mean, 
+               geom = "bar", 
+               fill = "White", 
+               color = "Black") +
+  stat_summary(fun.data = mean_cl_normal, 
+               geom = "errorbar", 
+               width = .2, 
+               position = "dodge") +
+  xlab("Average physical activity values for the cell phone accelerometer") +
+  ylab("Gender")
+
+```
+
+5)	Write up: include an APA style results section for this analysis (just the t-test not all the data screening).
+
+On average, males participated in PAL cell (M = 74.21, SD = 7.17) than females (M = 56.81, SD = 7.34). This difference was significant t(192) = -16.705, p < 2.2e-16 and it represented a large-sized effect d = -2.39855.
+
+
+# Dependent t-test:
+
+6)	Run a dependent t-test to tell if there are differences in the cell phone and hand held accelerometer results.
+    a.	Include means and sds for your groups. 
+    b.	Is there a significant difference in the ratings? 
+
+```{r dep1}
+
+#a.
+
+summary(df)
+
+#Since df has 6 NA values for PAL_cell and PAL_acc, we cannot do dependent t-test
+
+#Checking for dataframe "replace" at it has deleted missing values
+
+table(replace$gender)
+
+head(replace)
+
+#However, since it has uneven observations for gender in 'replace', I created another data frame with equal observations for the factor variable 'gender' by tweaking it (deleteing first 4 observations with  factor value 'male')
+
+replace1 = replace[5:188,]
+
+summary(replace1)
+
+t.test(PAL_cell ~ gender, data = replace1, var.equal = TRUE, paired = TRUE)
+
+t.test(PAL_acc ~ gender, data = replace1, var.equal = TRUE, paired = TRUE)
+
+#Mean, SD and Length for PAL_cell
+
+MD_cell = tapply(replace1$PAL_cell, replace1$gender, mean, na.rm = TRUE)
+stdevD_cell = tapply(replace1$PAL_cell, replace1$gender, sd, na.rm = TRUE)
+ND_cell = tapply(replace1$PAL_cell, replace1$gender, length)
+
+MD_cell;stdevD_cell;ND_cell
+
+#Mean, SD and Length for PAL_acc (hand held accelerometer results)
+
+MD_acc = tapply(replace1$PAL_acc, replace1$gender, mean, na.rm = TRUE)
+stdevD_acc = tapply(replace1$PAL_acc, replace1$gender, sd, na.rm = TRUE)
+ND_acc = tapply(replace1$PAL_acc, replace1$gender, length)
+
+MD_acc;stdevD_acc;ND_acc
+
+#b.
+
+#For both the t-test for cell phone and hand held accelerometer results, since the p-value (< 2.2e-16) is less than 0.05, we will reject the null hypothesis, implying that our alternate hypothesis is correct. Our data is significant, the true difference in means is not equal to 0 and there is a significant difference in the ratings.
+
+#The t-value for both the t-tests are different at -15.737 and -13.419 for cell phone and hand held accelerometer results respectively.
+
+
+```
+
+7)	Effect size: What is the effect size for this difference? Be sure to list which effect size you are using. 
+
+```{r effect2}
+
+#Calculating an effect size
+
+#For PAL_cell
+
+effect2_cell = d.dep.t.avg(m1 = MD_cell[1], m2 = MD_cell[2], 
+sd1 = stdevD_cell[1], sd2 = stdevD_cell[2],  
+n = ND_cell[1], a = .05)
+effect2_cell$d
+
+#For PAL_acc
+
+effect2_acc = d.dep.t.avg(m1 = MD_acc[1], m2 = MD_acc[2], 
+sd1 = stdevD_acc[1], sd2 = stdevD_acc[2],  
+n = ND_acc[1], a = .05)
+effect2_acc$d
+
+
+#Creating difference scores, calculating the difference score measures.
+
+table(replace1$gender)
+
+female = subset(replace1, gender == "female")
+male = subset(replace1, gender == "male")
+
+#For PAL_cell
+
+diff_cell = female$PAL_cell - male$PAL_cell
+mdiff_cell = mean(diff_cell, na.rm = T)
+sddiff_cell = sd(diff_cell, na.rm = T)
+N2_cell = length(diff_cell)
+
+mdiff_cell; sddiff_cell; N2_cell
+
+effect2.1_cell = d.dep.t.diff(mdiff = mdiff_cell, sddiff = sddiff_cell,
+                         n = N2_cell, a = .05)
+
+effect2.1_cell$d
+
+#For PAL_acc
+
+diff_acc = female$PAL_acc - male$PAL_acc
+mdiff_acc = mean(diff_acc, na.rm = T)
+sddiff_acc = sd(diff_acc, na.rm = T)
+N2_acc = length(diff_acc)
+
+mdiff_acc; sddiff_acc; N2_acc
+
+effect2.1_acc = d.dep.t.diff(mdiff = mdiff_acc, sddiff = sddiff_acc,
+                         n = N2_acc, a = .05)
+
+effect2.1_acc$d
+
+```
+
+8)	Power: Determine the number of participants you should have used in this experiment given the effect size you found above. 
+
+```{r power2}
+
+#Power for PAL_cell
+
+pwr.t.test(n = NULL, d = effect2_cell$d, sig.level = .05,
+           power = .80, type = "paired", alternative = "two.sided")
+
+#Power for PAL_acc
+
+pwr.t.test(n = NULL, d = effect2_acc$d, sig.level = .05,
+           power = .80, type = "paired", alternative = "two.sided")
+
+```
+
+9)	Graphs: Include a bar graph of these results.
+
+```{r graph2}
+
+bargraph_cell = ggplot(replace1, aes(PAL_cell, gender))
+bargraph_acc = ggplot(replace1, aes(PAL_acc, gender))
+
+#Bar graph for PAL_cell
+
+bargraph_cell +
+  cleanup +
+  stat_summary(fun = mean, 
+               geom = "bar", 
+               fill = "White", 
+               color = "Black") +
+  stat_summary(fun.data = mean_cl_normal, 
+               geom = "errorbar", 
+               width = .2, 
+               position = "dodge") +
+   xlab("PAL_cell") +
+  ylab("Gender")
+
+#Bar Graph for PAL_acc
+
+bargraph_acc +
+  cleanup +
+  stat_summary(fun = mean, 
+               geom = "bar", 
+               fill = "White", 
+               color = "Black") +
+  stat_summary(fun.data = mean_cl_normal, 
+               geom = "errorbar", 
+               width = .2, 
+               position = "dodge") +
+   xlab("PAL_acc") +
+  ylab("Gender")
+
+
+```
+
+10)	Write up: include an APA style results section for this analysis (just the t-test not all the data screening).
+
+For the t-test for PAL_cell, on average, males participated in PAL cell (M = 74.33, SD = 7.34) than females (M = 56.69, SD = 7.28). This difference was significant t(91) = -15.737, p < 2.2e-16 and it represented a large-sized effect d = 2.412083.
+
+For the t-test for PAL_acc, on average, males participated in PAL cell (M = 74.21, SD = 7.17) than females (M = 56.81, SD = 7.34). This difference was significant t(91) = -13.419, p < 2.2e-16 and it represented a large-sized effect d = 1.889467.
+
+
+# Theory:
+
+11)	List the null hypothesis for the dependent t-test.
+
+There is no significant differences in the cell phone (PAL_cell) and hand held accelerometer (PAL_acc) results.
+
+
+12)	List the research hypothesis for the dependent t-test.
+
+There is a significant difference in the cell phone (PAL_cell) and hand held accelerometer (PAL_acc) results.
+
+
+13)	If the null were true, what would we expect the mean difference score to be?
+
+If the null were true, we would expect the mean difference score to be 0
+
+
+14)	If the null were false, what would we expect the mean difference score to be?
+
+If the null were false, we would expect the mean difference score to be at least 0.30
+
+
+15)	In our formula for dependent t, what is the estimation of systematic variance?
+
+The variance for PAL_cell is 53.06752 and 53.94126 for females and males respectively.
+
+The variance for PAL_acc is 105.04203 and 65.70087 for females and males respectively.
+
+These are the variance created by our manipulation, hence they are an estimation systematic variance.
+
+
+16)	In our formula for dependent t, what is the estimation of unsystematic variance?
+
+Variance created by unknown factors are used to find unsystematic variance. SInce we are unaware of any unknown factors, we are unable to find an estimation of unsystematic variance.
+
+
+
